@@ -16,12 +16,12 @@ export function App() {
         <MarkdownThemeProvider>
           <SplitPageLayout>
             <SplitPageLayout.Header
-              className="position-sticky top-0 bg-[var(--bgColor-default)] z-100"
+              className="position-sticky top-0 bg-[var(--bgColor-default)] z-1"
               padding="condensed"
             >
               <Header />
             </SplitPageLayout.Header>
-            <SplitPageLayout.Content className="[&>div]:p-0 min-h-[var(--sticky-pane-height)]">
+            <SplitPageLayout.Content className="z-0 [&>div]:p-0 min-h-[var(--sticky-pane-height)]">
               <UserEvents status$={status$} />
             </SplitPageLayout.Content>
             <SplitPageLayout.Pane
