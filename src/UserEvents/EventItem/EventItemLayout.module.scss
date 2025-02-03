@@ -1,0 +1,35 @@
+.container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 2px 0 16px 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: start;
+  font-size: 16px;
+  color: inherit;
+}
+
+button.container {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--fgColor-accent);
+
+    &:has(a:hover) {
+      color: inherit;
+    }
+  }
+}
+
+.head {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 16px;
+}

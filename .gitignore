@@ -106,3 +106,5 @@ dist
 docs
 
 .DS_Store
+
+*storybook.log
