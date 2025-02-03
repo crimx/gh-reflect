@@ -55,18 +55,6 @@ export interface Enterprise {
  * GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub.
  */
 export type GitHubApp = null | {
-  client_id?: string;
-  client_secret?: string;
-  /**
-   * The number of installations associated with the GitHub app
-   */
-  installations_count?: number;
-  pem?: string;
-  /**
-   * The slug name of the GitHub app
-   */
-  slug?: string;
-  webhook_secret?: null | string;
   created_at: string;
   description: null | string;
   /**
@@ -96,6 +84,18 @@ export type GitHubApp = null | {
     metadata?: string;
   };
   updated_at: string;
+  client_id?: string;
+  client_secret?: string;
+  /**
+   * The number of installations associated with the GitHub app
+   */
+  installations_count?: number;
+  pem?: string;
+  /**
+   * The slug name of the GitHub app
+   */
+  slug?: string;
+  webhook_secret?: null | string;
 };
 /**
  * Issues are a great way to keep track of tasks, enhancements, and bugs for your projects.
@@ -160,11 +160,11 @@ export interface Issue {
   draft?: boolean;
   performed_via_github_app?: GitHubApp | null;
   pull_request?: {
-    merged_at?: null | string;
     diff_url: null | string;
     html_url: null | string;
     patch_url: null | string;
     url: null | string;
+    merged_at?: null | string;
   };
   reactions?: ReactionRollup;
   repository?: Repository;
@@ -425,11 +425,11 @@ export interface Repository {
    */
   merge_commit_title?: "MERGE_MESSAGE" | "PR_TITLE";
   permissions?: {
-    maintain?: boolean;
-    triage?: boolean;
     admin: boolean;
     pull: boolean;
     push: boolean;
+    maintain?: boolean;
+    triage?: boolean;
   };
   /**
    * The default value for a squash merge commit message:

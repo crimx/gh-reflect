@@ -1,3 +1,5 @@
-import wopjs from "@wopjs/eslint-config";
+import wopjs, { defineConfig } from "@wopjs/eslint-config";
 
-export default wopjs;
+export default defineConfig(...wopjs, {
+  ignores: [".storybook/public/mockServiceWorker.js"],
+});
