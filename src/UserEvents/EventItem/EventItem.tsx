@@ -1,10 +1,10 @@
 import { memo } from "react";
 
-import { type UserEvent } from "../interface";
+import { type GitHubEvent } from "../interface";
 import { FallbackEventItem } from "./FallbackEventItem";
 
 export interface EventItemProps {
-  event: UserEvent;
+  event: GitHubEvent;
 }
 
 export const EventItem = /* @__PURE__ */ memo<EventItemProps>(function EventItem({ event }) {

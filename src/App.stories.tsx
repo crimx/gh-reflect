@@ -11,7 +11,7 @@ import PullRequestReviewEventFixture from "./__fixtures__/PullRequestReviewEvent
 import PushEventFixture from "./__fixtures__/PushEvent.fixture.json";
 import ReleaseEventFixture from "./__fixtures__/ReleaseEvent.fixture.json";
 import { App } from "./App";
-import { type UserEvent } from "./UserEvents/interface";
+import { type GitHubEvent } from "./UserEvents/interface";
 import { type UserEvents } from "./UserEvents/UserEvents";
 
 const meta = {
@@ -36,7 +36,7 @@ export const Overview: StoryObj = {
           date.setTime(date.getTime() - page * ITEMS_PER_PAGE * 60 * 60 * 1000);
 
           const events = faker.helpers
-            .uniqueArray<UserEvent>(
+            .uniqueArray<GitHubEvent>(
               [
                 ...CreateEventFixture,
                 ...DeleteEventFixture,

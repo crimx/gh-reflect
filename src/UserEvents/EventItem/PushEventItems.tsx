@@ -1,66 +1,63 @@
-import { GitCommitIcon, RepoIcon, RepoPushIcon } from "@primer/octicons-react";
+import { GitCommitIcon, RepoPushIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
-import { useMemo } from "react";
+import { plural } from "#utils";
+import { memo, useMemo } from "react";
 
 import { type PushEvent } from "../interface";
 import { EventItemLayout } from "./EventItemLayout";
+import { RepoSubList } from "./RepoSubList";
 
 export interface PushEventItemsProps {
   events: PushEvent[];
 }
 
-export const PushEventItems = ({ events }: PushEventItemsProps) => {
-  const { commits, counts, repos } = useMemo(() => {
-    const countsMap = new Map<string, { commits: number; events: PushEvent[]; repo: string; url: string }>();
+export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function PushEventItems({ events }) {
+  const { commitsTotal, repos } = useMemo(() => {
+    const reposMap = new Map<string, { commits: number; events: PushEvent[]; name: string; url: string }>();
     for (const event of events) {
-      let count = countsMap.get(event.repo.name);
-      if (!count) {
-        countsMap.set(
-          event.repo.name,
-          (count = { commits: 0, events: [], repo: event.repo.name, url: event.repo.url }),
-        );
+      let repo = reposMap.get(event.repo.name);
+      if (!repo) {
+        reposMap.set(event.repo.name, (repo = { commits: 0, events: [], name: event.repo.name, url: event.repo.url }));
       }
-      count.commits += event.payload.size;
-      count.events.push(event);
+      repo.commits += event.payload.size;
+      repo.events.push(event);
     }
-    const counts = [...countsMap.values()].sort((a, b) => a.commits - b.commits);
-    const repos = countsMap.size;
-    const commits = counts.reduce((sum, { commits }) => sum + commits, 0);
-    return { commits, counts, repos };
+    const repos = [...reposMap.values()].sort((a, b) => b.commits - a.commits);
+    const commitsTotal = repos.reduce((sum, { commits }) => sum + commits, 0);
+    return { commitsTotal, repos };
   }, [events]);
   return (
     <EventItemLayout
-      head={
-        <>
-          Pushed {commits} commits to {repos} repos
-        </>
-      }
+      head={`Pushed ${plural(commitsTotal, "commit")} to ${plural(repos.length, "repository")}`}
       icon={<RepoPushIcon />}
     >
-      <ul className="list-none p-0">
-        {counts.map(({ commits, events, repo, url }) => (
-          <li className="my-1" key={repo}>
-            <div>
-              <Link className="mr-2" href={url} target="_blank">
-                <RepoIcon /> {repo}
-              </Link>
-              {commits} commits
-            </div>
-            <ul className="list-none p-0 pl-5">
-              {events.map(event =>
-                event.payload.commits.map(commit => (
-                  <li className="py-1 flex flex-nowrap" key={commit.sha}>
-                    <GitCommitIcon className="mt-1 mr-2 text-color-[var(--fgColor-done)]" />
-                    <Link href={commit.url} muted target="_blank">
-                      {commit.message.replace(/\n[\s\S]*$/, "")}
-                    </Link>
-                  </li>
-                )),
-              )}
-            </ul>
-          </li>
+      <RepoSubList.List>
+        {repos.map(({ commits, events, name, url }) => (
+          <RepoSubList.RepoItem
+            key={name}
+            title={
+              <>
+                <Link className="mr-2" href={url} target="_blank">
+                  {name}
+                </Link>
+                {commits > 1 && `${commits} commits`}
+              </>
+            }
+          >
+            {events.map(event =>
+              event.payload.commits.map(commit => (
+                <RepoSubList.SubItem
+                  key={commit.sha}
+                  icon={<GitCommitIcon className="text-color-[var(--fgColor-done)]" />}
+                  href={commit.url}
+                >
+                  {commit.message.replace(/\n[\s\S]*$/, "")}
+                </RepoSubList.SubItem>
+              )),
+            )}
+          </RepoSubList.RepoItem>
         ))}
-      </ul>
+      </RepoSubList.List>
     </EventItemLayout>
   );
-};
+});

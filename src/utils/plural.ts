@@ -1,0 +1,9 @@
+const config = {
+  commit: "commits",
+  issue: "issues",
+  repository: "repositories",
+  "pull request": "pull requests",
+};
+
+export const plural = (count: number, word: keyof typeof config): string =>
+  `${count} ${(count > 1 && config[word]) || word}`;

@@ -37,7 +37,7 @@ export const EventItemLayoutExpandable = ({ children, head, icon }: EventItemLay
       <Timeline.Badge>{icon}</Timeline.Badge>
       <Timeline.Body>
         <button
-          className={styles.container}
+          className={`${styles.container} mt-[4px]`}
           onClick={e => {
             if (!(e.target as Element).closest?.("a")) {
               setExpand(expanded => !expanded);

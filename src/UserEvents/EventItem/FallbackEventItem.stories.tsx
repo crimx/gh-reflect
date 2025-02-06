@@ -9,7 +9,7 @@ import PullRequestReviewCommentEventFixture from "../../__fixtures__/PullRequest
 import PullRequestReviewEventFixture from "../../__fixtures__/PullRequestReviewEvent.fixture.json";
 import PushEventFixture from "../../__fixtures__/PushEvent.fixture.json";
 import ReleaseEventFixture from "../../__fixtures__/ReleaseEvent.fixture.json";
-import { type UserEvent } from "../interface";
+import { type GitHubEvent } from "../interface";
 import { FallbackEventItem } from "./FallbackEventItem";
 
 const meta = {
@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 export const Overview: Story = {
   args: {
     event: faker.helpers.arrayElement(
-      faker.helpers.arrayElement<UserEvent[]>([
+      faker.helpers.arrayElement<GitHubEvent[]>([
         CreateEventFixture,
         DeleteEventFixture,
         IssueCommentEventFixture,

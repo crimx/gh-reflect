@@ -2,12 +2,12 @@ import { ReportIcon } from "@primer/octicons-react";
 import { memo } from "react";
 
 import { Markdown } from "../../Markdown";
-import { type UserEvent } from "../interface";
+import { type GitHubEvent } from "../interface";
 import { EventItemLayoutExpandable } from "./EventItemLayout";
 import { LabelRepo } from "./LabelRepo";
 
 export interface FallbackEventItemProps {
-  event: UserEvent;
+  event: GitHubEvent;
 }
 
 export const FallbackEventItem = /* @__PURE__ */ memo<FallbackEventItemProps>(function FallbackEventItem({ event }) {

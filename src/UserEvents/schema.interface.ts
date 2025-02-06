@@ -22,6 +22,25 @@ export type AuthorAssociation =
   | "NONE"
   | "OWNER";
 /**
+ * Commit Comment
+ */
+export interface CommitComment {
+  author_association: AuthorAssociation;
+  body: string;
+  commit_id: string;
+  created_at: string;
+  html_url: string;
+  id: number;
+  line: null | number;
+  node_id: string;
+  path: null | string;
+  position: null | number;
+  updated_at: string;
+  url: string;
+  user: null | SimpleUser;
+  reactions?: ReactionRollup;
+}
+/**
  * An enterprise on GitHub.
  */
 export interface Enterprise {
@@ -98,6 +117,36 @@ export type GitHubApp = null | {
   webhook_secret?: null | string;
 };
 /**
+ * UserEvent
+ */
+export interface GitHubEvent {
+  actor: Actor;
+  created_at: null | string;
+  id: string;
+  payload: unknown;
+  // payload: {
+  //   action?: string;
+  //   comment?: IssueComment;
+  //   issue?: Issue;
+  //   pages?: {
+  //     action?: string;
+  //     html_url?: string;
+  //     page_name?: string;
+  //     sha?: string;
+  //     summary?: null | string;
+  //     title?: string;
+  //   }[];
+  // };
+  public: boolean;
+  repo: {
+    id: number;
+    name: string;
+    url: string;
+  };
+  type: null | string;
+  org?: Actor;
+}
+/**
  * Issues are a great way to keep track of tasks, enhancements, and bugs for your projects.
  */
 export interface Issue {
@@ -113,18 +162,7 @@ export interface Issue {
   /**
    * Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository
    */
-  labels: (
-    | string
-    | {
-        color?: null | string;
-        default?: boolean;
-        description?: null | string;
-        id?: number;
-        name?: string;
-        node_id?: string;
-        url?: string;
-      }
-  )[];
+  labels: (Label | string)[];
   labels_url: string;
   locked: boolean;
   milestone: Milestone | null;
@@ -203,6 +241,16 @@ export interface IssueComment {
   performed_via_github_app?: GitHubApp | null;
   reactions?: ReactionRollup;
 }
+
+export interface Label {
+  color?: null | string;
+  default?: boolean;
+  description?: null | string;
+  id?: number;
+  name?: string;
+  node_id?: string;
+  url?: string;
+}
 /**
  * License Simple
  */
@@ -214,7 +262,6 @@ export interface LicenseSimple {
   url: null | string;
   html_url?: string;
 }
-
 /**
  * A collection of related issues and pull requests.
  */
@@ -244,6 +291,108 @@ export interface Milestone {
   title: string;
   updated_at: string;
   url: string;
+}
+export interface PullRequest {
+  _links: {
+    comments: {
+      href: string;
+    };
+    commits: {
+      href: string;
+    };
+    html: {
+      href: string;
+    };
+    issue: {
+      href: string;
+    };
+    review_comment: {
+      href: string;
+    };
+    review_comments: {
+      href: string;
+    };
+    self: {
+      href: string;
+    };
+    statuses: {
+      href: string;
+    };
+  };
+  active_lock_reason: null | string;
+  additions: number;
+  assignee: null | string;
+  assignees: string[];
+  author_association: string;
+  auto_merge: {
+    commit_message: string;
+    commit_title: string;
+    enabled_by: SimpleUser;
+    merge_method: string;
+  };
+  base: {
+    label: string;
+    ref: string;
+    repo: Repository;
+    sha: string;
+    user: SimpleUser;
+  };
+  body: null | string;
+  changed_files: number;
+  closed_at: string;
+  comments: number;
+  comments_url: string;
+  commits: number;
+  commits_url: string;
+  created_at: string;
+  deletions: number;
+  diff_url: string;
+  draft: boolean;
+  head: {
+    label: string;
+    ref: string;
+    repo: Repository;
+    sha: string;
+    user: SimpleUser;
+  };
+  html_url: string;
+  id: number;
+  issue_url: string;
+  labels:
+    | string
+    | {
+        color: string;
+        default: boolean;
+        description: null | string;
+        id: number;
+        name: string;
+        node_id: string;
+        url: string;
+      }[];
+  locked: boolean;
+  maintainer_can_modify: boolean;
+  merge_commit_sha: string;
+  mergeable: boolean | null;
+  mergeable_state: string;
+  merged: boolean;
+  merged_at: string;
+  merged_by: SimpleUser;
+  milestone: null | string;
+  node_id: string;
+  number: number;
+  patch_url: string;
+  rebaseable: boolean | null;
+  requested_reviewers: SimpleUser[];
+  requested_teams: unknown[];
+  review_comment_url: string;
+  review_comments: number;
+  review_comments_url: string;
+  state: string;
+  statuses_url: string;
+  title: string;
+  updated_at: string;
+  url: string;
+  user: SimpleUser;
 }
 export interface ReactionRollup {
   "-1": number;
@@ -494,34 +643,4 @@ export interface SubIssuesSummary {
   completed: number;
   percent_completed: number;
   total: number;
-}
-/**
- * UserEvent
- */
-export interface UserEvent {
-  actor: Actor;
-  created_at: null | string;
-  id: string;
-  payload: unknown;
-  // payload: {
-  //   action?: string;
-  //   comment?: IssueComment;
-  //   issue?: Issue;
-  //   pages?: {
-  //     action?: string;
-  //     html_url?: string;
-  //     page_name?: string;
-  //     sha?: string;
-  //     summary?: null | string;
-  //     title?: string;
-  //   }[];
-  // };
-  public: boolean;
-  repo: {
-    id: number;
-    name: string;
-    url: string;
-  };
-  type: null | string;
-  org?: Actor;
 }

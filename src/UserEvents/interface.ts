@@ -1,156 +1,238 @@
+/** https://docs.github.com/en/rest/using-the-rest-api/github-event-types */
+
 import {
+  type CommitComment,
+  type GitHubEvent,
   type Issue,
   type IssueComment,
+  type Label,
+  type PullRequest,
   type ReactionRollup,
   type Repository,
   type SimpleUser,
-  type UserEvent,
 } from "./schema.interface";
 
 export * from "./schema.interface";
 
-export interface CreateEvent extends UserEvent {
+/**
+ * A commit comment is created.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for commit comments](https://docs.github.com/en/rest/commits/comments).
+ */
+export interface CommitCommentEvent extends GitHubEvent {
   payload: {
+    /** 	The action performed. Can be `created`. */
+    action: string;
+    /** The commit comment resource. */
+    comment: CommitComment;
+  };
+  type: "CommitCommentEvent";
+}
+
+/**
+ * A Git branch or tag is created.
+ * For more information, see [REST API endpoints for Git database](https://docs.github.com/en/rest/git#create-a-reference).
+ */
+export interface CreateEvent extends GitHubEvent {
+  payload: {
+    /** The repository's current description. */
     description: null | string;
+    /**
+     * The name of the repository's default branch (usually `main`).
+     */
     master_branch: string;
+    /**
+     * Can be either `user` or a deploy key.
+     */
     pusher_type: string;
+    /**
+     * 	The `git ref` resource, or `null` if `ref_type` is `repository`.
+     * {@link https://docs.github.com/en/rest/git#get-a-reference}
+     */
     ref: null | string;
-    ref_type: string;
+    /**
+     * The type of Git ref object created in the repository. Can be either `branch`, `tag`, or `repository`.
+     */
+    ref_type: "branch" | "repository" | "tag";
   };
   type: "CreateEvent";
 }
 
-export interface DeleteEvent extends UserEvent {
+/**
+ * A Git branch or tag is deleted.
+ * For more information, see the [REST API endpoints for Git database REST API](https://docs.github.com/en/rest/git#delete-a-reference).
+ */
+export interface DeleteEvent extends GitHubEvent {
   payload: {
     pusher_type: string;
+    /** The `git ref` resource. */
     ref: string;
+    /**
+     * The type of Git ref object deleted in the repository. Can be either `branch` or `tag`.
+     */
     ref_type: string;
   };
   type: "DeleteEvent";
 }
 
-export interface IssueCommentEvent extends UserEvent {
+/**
+ * A user forks a repository.
+ * For more information, see [REST API endpoints for repositories](https://docs.github.com/en/rest/repos#forks).
+ */
+export interface ForkEvent extends GitHubEvent {
   payload: {
-    action: "created";
+    /** The created repository resource. */
+    forkee: Repository;
+  };
+  type: "ForkEvent";
+}
+
+/**
+ * A wiki page is created or updated.
+ * For more information, see [About wikis](https://docs.github.com/en/communities/documenting-your-project-with-wikis/about-wikis).
+ */
+export interface GollumEvent extends GitHubEvent {
+  payload: {
+    /** The pages that were updated. */
+    pages: Array<{
+      /** The action that was performed on the page. Can be `created` or `edited`. */
+      action: "created" | "edited";
+      /** Points to the HTML wiki page. */
+      html_url: string;
+      /** The name of the page. */
+      page_name: string;
+      /** The latest commit SHA of the page. */
+      sha: string;
+      /** The current page title. */
+      title: string;
+    }>;
+  };
+  type: "GollumEvent";
+}
+
+/**
+ * Activity related to an issue or pull request comment.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see the [REST API endpoints for issues](https://docs.github.com/en/rest/issues#comments).
+ */
+export interface IssueCommentEvent extends GitHubEvent {
+  payload: {
+    /** The action that was performed on the comment. Can be one of `created`, `edited`, or `deleted`. */
+    action: "created" | "deleted" | "edited";
+    /** The comment itself. */
     comment: IssueComment;
+    /** The issue the comment belongs to. */
     issue: Issue;
+    /** The changes to the comment if the action was `edited`. */
+    changes?: {
+      body: {
+        /** The previous version of the body if the action was `edited`. */
+        from: string;
+      };
+    };
   };
   type: "IssueCommentEvent";
 }
 
-export interface PullRequest {
-  _links: {
-    comments: {
-      href: string;
+/**
+ * Activity related to an issue.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see the [REST API endpoints for issues](https://docs.github.com/en/rest/issues).
+ */
+export interface IssuesEvent extends GitHubEvent {
+  payload: {
+    /** The action that was performed. Can be one of `opened`, `edited`, `closed`, `reopened`, `assigned`, `unassigned`, `labeled`, or `unlabeled`. */
+    action: "assigned" | "closed" | "edited" | "labeled" | "opened" | "reopened" | "unassigned" | "unlabeled";
+    /** The issue the comment belongs to. */
+    issue: Issue;
+    /** The optional user who was assigned or unassigned from the issue. */
+    assignee?: SimpleUser;
+    /** The changes to the issue if the action was `edited`. */
+    changes?: {
+      body: {
+        /** The previous version of the body if the action was `edited`. */
+        from: string;
+      };
+      title: {
+        /** The previous version of the title if the action was `edited`. */
+        from: string;
+      };
     };
-    commits: {
-      href: string;
-    };
-    html: {
-      href: string;
-    };
-    issue: {
-      href: string;
-    };
-    review_comment: {
-      href: string;
-    };
-    review_comments: {
-      href: string;
-    };
-    self: {
-      href: string;
-    };
-    statuses: {
-      href: string;
-    };
+    /** The optional label that was added or removed from the issue. */
+    label?: Label;
   };
-  active_lock_reason: null | string;
-  additions: number;
-  assignee: null | string;
-  assignees: string[];
-  author_association: string;
-  auto_merge: {
-    commit_message: string;
-    commit_title: string;
-    enabled_by: SimpleUser;
-    merge_method: string;
-  };
-  base: {
-    label: string;
-    ref: string;
-    repo: Repository;
-    sha: string;
-    user: SimpleUser;
-  };
-  body: null | string;
-  changed_files: number;
-  closed_at: string;
-  comments: number;
-  comments_url: string;
-  commits: number;
-  commits_url: string;
-  created_at: string;
-  deletions: number;
-  diff_url: string;
-  draft: boolean;
-  head: {
-    label: string;
-    ref: string;
-    repo: Repository;
-    sha: string;
-    user: SimpleUser;
-  };
-  html_url: string;
-  id: number;
-  issue_url: string;
-  labels:
-    | string
-    | {
-        color: string;
-        default: boolean;
-        description: null | string;
-        id: number;
-        name: string;
-        node_id: string;
-        url: string;
-      }[];
-  locked: boolean;
-  maintainer_can_modify: boolean;
-  merge_commit_sha: string;
-  mergeable: boolean | null;
-  mergeable_state: string;
-  merged: boolean;
-  merged_at: string;
-  merged_by: SimpleUser;
-  milestone: null | string;
-  node_id: string;
-  number: number;
-  patch_url: string;
-  rebaseable: boolean | null;
-  requested_reviewers: SimpleUser[];
-  requested_teams: unknown[];
-  review_comment_url: string;
-  review_comments: number;
-  review_comments_url: string;
-  state: string;
-  statuses_url: string;
-  title: string;
-  updated_at: string;
-  url: string;
-  user: SimpleUser;
+  type: "IssuesEvent";
 }
 
-export interface PullRequestEvent extends UserEvent {
+/**
+ * Activity related to repository collaborators.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for collaborators](https://docs.github.com/en/rest/collaborators/collaborators).
+ */
+export interface MemberEvent extends GitHubEvent {
   payload: {
-    action: string;
+    /** The action that was performed. Can be `added` to indicate a user accepted an invitation to a repository. */
+    action: "added" | "edited";
+    /** The user that was added. */
+    member: SimpleUser;
+    /** The changes to the collaborator permissions if the action was `edited`. */
+    changes?: {
+      old_permission: {
+        /** The previous permissions of the collaborator if the action was `edited`. */
+        from: string;
+      };
+    };
+  };
+  type: "MemberEvent";
+}
+
+/**
+ * Activity related to pull requests.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for pull requests](https://docs.github.com/en/rest/pulls).
+ */
+export interface PullRequestEvent extends GitHubEvent {
+  payload: {
+    /** The action that was performed. Can be one of `opened`, `edited`, `closed`, `reopened`, `assigned`, `unassigned`, `review_requested`, `review_request_removed`, `labeled`, `unlabeled`, and `synchronize`. */
+    action:
+      | "assigned"
+      | "closed"
+      | "edited"
+      | "labeled"
+      | "opened"
+      | "reopened"
+      | "review_request_removed"
+      | "review_requested"
+      | "synchronize"
+      | "unassigned"
+      | "unlabeled";
+    /** The pull request number. */
     number: number;
+    /** The pull request itself. */
     pull_request: PullRequest;
+    /** The changes to the comment if the action was `edited`. */
+    changes?: {
+      body: {
+        /** The previous version of the body if the action was `edited`. */
+        from: string;
+      };
+      title: {
+        /** The previous version of the title if the action was `edited`. */
+        from: string;
+      };
+    };
+    /** The reason the pull request was removed from a merge queue if the action was `dequeued`. */
+    reason?: string;
   };
   type: "PullRequestEvent";
 }
 
-export interface PullRequestReviewCommentEvent extends UserEvent {
+/**
+ * Activity related to pull request review comments in the pull request's unified diff.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for pull requests](https://docs.github.com/en/rest/pulls#comments).
+ */
+export interface PullRequestReviewCommentEvent extends GitHubEvent {
   payload: {
     action: string;
     comment: {
@@ -196,10 +278,18 @@ export interface PullRequestReviewCommentEvent extends UserEvent {
   type: "PullRequestReviewCommentEvent";
 }
 
-export interface PullRequestReviewEvent extends UserEvent {
+/**
+ * Activity related to pull request reviews.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for pull requests](https://docs.github.com/en/rest/pulls#reviews).
+ */
+export interface PullRequestReviewEvent extends GitHubEvent {
   payload: {
-    action: string;
+    /** The action that was performed. Can be `created`. */
+    action: "created";
+    /** The pull request the review pertains to. */
     pull_request: PullRequest;
+    /** The review that was affected. */
     review: {
       _links: {
         html: {
@@ -224,14 +314,44 @@ export interface PullRequestReviewEvent extends UserEvent {
   type: "PullRequestReviewEvent";
 }
 
-export interface PushEvent extends UserEvent {
+/**
+ * Activity related to a comment thread on a pull request being marked as resolved or unresolved.
+ * The type of activity is specified in the `action` property of the payload object.
+ */
+export interface PullRequestReviewThreadEvent extends GitHubEvent {
+  payload: {
+    /**
+     * 	The action that was performed. Can be one of:
+     *  - `resolved` - A comment thread on a pull request was marked as resolved.
+     *  - `unresolved` - A previously resolved comment thread on a pull request was marked as unresolved.
+     */
+    action: "resolved" | "unresolved";
+    /** The pull request the thread pertains to. */
+    pull_request: PullRequest;
+    /** The thread that was affected. */
+    thread: object;
+  };
+  type: "PullRequestReviewThreadEvent";
+}
+
+/**
+ * One or more commits are pushed to a repository branch or tag.
+ */
+export interface PushEvent extends GitHubEvent {
   payload: {
     before: string;
+    /**
+     * An array of commit objects describing the pushed commits.
+     * The array includes a maximum of 20 commits.
+     * If necessary, you can use the Commits API to fetch additional commits.
+     * This limit is applied to timeline events only and isn't applied to webhook deliveries.
+     */
     commits: Array<{
       author: {
         email: string;
         name: string;
       };
+      /** Whether this commit is distinct from any that have been pushed before. */
       distinct: boolean;
       message: string;
       sha: string;
@@ -247,9 +367,14 @@ export interface PushEvent extends UserEvent {
   type: "PushEvent";
 }
 
-export interface ReleaseEvent extends UserEvent {
+/**
+ * Activity related to a release. The type of activity is specified in the action property of the payload object.
+ * For more information, see the [REST API endpoints for releases and release assets](https://docs.github.com/en/rest/releases) REST API.
+ */
+export interface ReleaseEvent extends GitHubEvent {
   payload: {
-    action: string;
+    /** The action that was performed. Can be published. */
+    action: "edited" | "published";
     release: {
       assets: unknown[];
       assets_url: string;
@@ -272,6 +397,27 @@ export interface ReleaseEvent extends UserEvent {
       url: string;
       zipball_url: string;
     };
+    changes?: {
+      body: {
+        /** he previous version of the body if the action was `edited`. */
+        from: string;
+      };
+      name: {
+        /** The previous version of the name if the action was `edited`. */
+        from: string;
+      };
+    };
   };
   type: "ReleaseEvent";
+}
+
+/**
+ * When someone stars a repository.
+ * The type of activity is specified in the action property of the payload object.
+ * For more information, see [REST API endpoints for activity](https://docs.github.com/en/rest/activity#starring).
+ */
+export interface WatchEvent extends GitHubEvent {
+  /** The action that was performed. Currently, can only be started. */
+  action: "started";
+  type: "WatchEvent";
 }

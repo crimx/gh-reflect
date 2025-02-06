@@ -1,4 +1,7 @@
 {
+  "imports": {
+    "#utils": "./src/utils/index.ts"
+  },
   "scripts": {
     "prepublishOnly": "npm run build",
     "lint": "eslint && prettier --check .",
@@ -17,7 +20,7 @@
     "@storybook/react": "^8.5.2",
     "@storybook/react-vite": "^8.5.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "@wopjs/eslint-config": "^0.1.10",
+    "@wopjs/eslint-config": "^0.1.11",
     "eslint": "^9.19.0",
     "msw": "^2.7.0",
     "msw-storybook-addon": "^2.0.4",

@@ -1,13 +1,13 @@
 import { catchError, type Observable, of, startWith, switchMap } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 
-import { type UserEvent } from "./interface";
+import { type GitHubEvent } from "./interface";
 
 export interface FetchStatus {
   fetching: boolean;
   page: number;
   error?: Error;
-  events?: UserEvent[];
+  events?: GitHubEvent[];
   limit?: null | number;
   remaining?: null | number;
   status?: null | number;
