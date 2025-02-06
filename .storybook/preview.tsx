@@ -6,8 +6,6 @@ import { type Preview } from "@storybook/react";
 import { initialize, mswLoader } from "msw-storybook-addon";
 import React, { useLayoutEffect } from "react";
 
-import { MarkdownThemeProvider } from "../src/Markdown";
-
 /*
  * Initializes MSW
  * See https://github.com/mswjs/msw-storybook-addon#configuring-msw
@@ -23,10 +21,8 @@ const preview: Preview = {
       return (
         <ThemeProvider colorMode={context.globals.colorMode}>
           <BaseStyles>
-            <MarkdownThemeProvider>
-              <UpdateBodyColorMode />
-              {Story()}
-            </MarkdownThemeProvider>
+            <UpdateBodyColorMode />
+            {Story()}
           </BaseStyles>
         </ThemeProvider>
       );
