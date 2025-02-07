@@ -15,3 +15,14 @@ updates:
         dependency-type: "development"
       prod-deps:
         dependency-type: "production"
+    ignore:
+      - dependency-name: "@types/react"
+        versions: ["19.x"]
+      - dependency-name: "@types/react-dom"
+        versions: ["19.x"]
+      - dependency-name: "react"
+        versions: ["19.x"]
+      - dependency-name: "react-dom"
+        versions: ["19.x"]
+      - dependency-name: "styled-components"
+        versions: ["6.x"]
