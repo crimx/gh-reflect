@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 import { type GitHubEvent } from "../interface";
-import { FallbackEventItem } from "./FallbackEventItem";
+import { FallbackEventItem } from "./FallbackEventItems";
 
 export interface EventItemProps {
   event: GitHubEvent;

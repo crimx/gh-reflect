@@ -13,8 +13,12 @@ export interface CreateEventItemsProps {
 export const CreateEventItems = /* @__PURE__ */ memo(function CreateEventItems({ events }: CreateEventItemsProps) {
   const createRepoEvents = useMemo(() => events.filter(event => event.payload.ref_type === "repository"), [events]);
 
+  if (!createRepoEvents.length) {
+    return null;
+  }
+
   return (
-    <EventItemLayout head={`Created ${plural(events.length, "repository")}`} icon={<RepoIcon />}>
+    <EventItemLayout head={`Created ${plural(createRepoEvents.length, "repository")}`} icon={<RepoIcon />}>
       <RepoList events={createRepoEvents} />
     </EventItemLayout>
   );

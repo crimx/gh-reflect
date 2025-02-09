@@ -10,7 +10,7 @@ import PullRequestReviewEventFixture from "../../__fixtures__/PullRequestReviewE
 import PushEventFixture from "../../__fixtures__/PushEvent.fixture.json";
 import ReleaseEventFixture from "../../__fixtures__/ReleaseEvent.fixture.json";
 import { type GitHubEvent } from "../interface";
-import { FallbackEventItem } from "./FallbackEventItem";
+import { FallbackEventItem } from "./FallbackEventItems";
 
 const meta = {
   component: FallbackEventItem,

@@ -17,7 +17,10 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
     for (const event of events) {
       let repo = reposMap.get(event.repo.name);
       if (!repo) {
-        reposMap.set(event.repo.name, (repo = { commits: 0, events: [], name: event.repo.name, url: event.repo.url }));
+        reposMap.set(
+          event.repo.name,
+          (repo = { commits: 0, events: [], name: event.repo.name, url: `https://github.com/${event.repo.name}` }),
+        );
       }
       repo.commits += event.payload.size;
       repo.events.push(event);
@@ -49,7 +52,7 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
                 <RepoSubList.SubItem
                   key={commit.sha}
                   icon={<GitCommitIcon className="text-color-[var(--fgColor-done)]" />}
-                  href={commit.url}
+                  href={`https://github.com/${event.repo.name}/commit/${commit.sha}`}
                 >
                   {commit.message.replace(/\n[\s\S]*$/, "")}
                 </RepoSubList.SubItem>

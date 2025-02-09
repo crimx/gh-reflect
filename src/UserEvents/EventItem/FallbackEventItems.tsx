@@ -24,3 +24,19 @@ export const FallbackEventItem = /* @__PURE__ */ memo<FallbackEventItemProps>(fu
     </EventItemLayoutExpandable>
   );
 });
+
+export interface FallbackEventItemsProps {
+  events: GitHubEvent[];
+}
+
+export const FallbackEventItems = /* @__PURE__ */ memo<FallbackEventItemsProps>(function FallbackEventItems({
+  events,
+}) {
+  return (
+    <>
+      {events.map(event => (
+        <FallbackEventItem key={event.id} event={event} />
+      ))}
+    </>
+  );
+});

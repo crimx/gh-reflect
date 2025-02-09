@@ -324,7 +324,7 @@ export interface PullRequest {
   assignee: null | string;
   assignees: string[];
   author_association: string;
-  auto_merge: {
+  auto_merge: null | {
     commit_message: string;
     commit_title: string;
     enabled_by: SimpleUser;

@@ -4,13 +4,13 @@ import { fromFetch } from "rxjs/fetch";
 import { type GitHubEvent } from "./interface";
 
 export interface FetchStatus {
-  fetching: boolean;
-  page: number;
-  error?: Error;
-  events?: GitHubEvent[];
-  limit?: null | number;
-  remaining?: null | number;
-  status?: null | number;
+  readonly fetching: boolean;
+  readonly page: number;
+  readonly error?: Error;
+  readonly events?: GitHubEvent[];
+  readonly limit?: null | number;
+  readonly remaining?: null | number;
+  readonly status?: null | number;
 }
 
 export const fetchEvents = (username: string, token?: string, page = 1): Observable<FetchStatus> => {

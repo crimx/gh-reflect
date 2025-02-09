@@ -10,7 +10,7 @@ export interface RepoListProps {
 
 export const RepoList = ({ events, lineThrough }: RepoListProps) => {
   return (
-    <ul className="list-none p-0">
+    <ul className="list-none p-0 m-0">
       {events.map(event => (
         <li className="my-1" key={event.repo.name}>
           <RepoIcon />

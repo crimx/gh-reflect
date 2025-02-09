@@ -18,7 +18,10 @@ export const IssuesEventItems = /* @__PURE__ */ memo(function IssueEventItems({ 
       if (event.payload.action === "opened" || event.payload.action === "reopened") {
         let repo = reposMap.get(event.repo.name);
         if (!repo) {
-          reposMap.set(event.repo.name, (repo = { events: [], name: event.repo.name, url: event.repo.url }));
+          reposMap.set(
+            event.repo.name,
+            (repo = { events: [], name: event.repo.name, url: `https://github.com/${event.repo.name}` }),
+          );
         }
         repo.events.push(event);
       }
@@ -66,7 +69,7 @@ export const IssuesEventItems = /* @__PURE__ */ memo(function IssueEventItems({ 
                       <IssueOpenedIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
                     )
                   }
-                  href={issue.url}
+                  href={issue.html_url}
                 >
                   {issue.title}
                 </RepoSubList.SubItem>
