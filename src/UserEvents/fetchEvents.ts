@@ -14,6 +14,7 @@ export interface FetchStatus {
 }
 
 export const fetchEvents = (username: string, token?: string, page = 1): Observable<FetchStatus> => {
+  console.log("fetchEvents", page);
   const headers: HeadersInit = {
     Accept: "application/vnd.github+json",
   };

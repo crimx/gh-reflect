@@ -19,11 +19,11 @@ export const useEvents = (): [Observable<UseEventsFetchStatus>, (options: Option
           return of<FetchStatus>({ fetching: false, page: 0 });
         }
         return fetchEvents(options.name, options.token).pipe(
-          expand((status, index) => {
+          expand(status => {
             if (!status.fetching && !status.error && status.events?.length && status.remaining) {
               const oldestEvent = status.events[0];
               if (oldestEvent.created_at && new Date(oldestEvent.created_at).getTime() > options.since) {
-                return fetchEvents(options.name, options.token, index + 2);
+                return fetchEvents(options.name, options.token, status.page + 1);
               }
             }
             return EMPTY;
