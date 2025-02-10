@@ -6,7 +6,7 @@ import { fetchEvents, type FetchStatus } from "./fetchEvents";
 import { type GitHubEvent } from "./schema.interface";
 
 export interface UseEventsFetchStatus extends Omit<FetchStatus, "events"> {
-  readonly eventsByDate?: Record<string, Record<string, GitHubEvent[]>>;
+  readonly eventsByType?: Record<string, GitHubEvent[]>;
 }
 
 export const useEvents = (): [Observable<UseEventsFetchStatus>, (options: Options | undefined) => void] => {
@@ -29,28 +29,16 @@ export const useEvents = (): [Observable<UseEventsFetchStatus>, (options: Option
             return EMPTY;
           }),
           scan((acc: UseEventsFetchStatus, status: FetchStatus): UseEventsFetchStatus => {
-            let eventsByDate = acc.eventsByDate;
+            let eventsByType = acc.eventsByType;
             const { events, ...restStatus } = status;
             if (events?.length) {
-              eventsByDate = { ...eventsByDate };
+              eventsByType = { ...eventsByType };
               for (const event of events) {
-                if (event.type && event.created_at) {
-                  const createdAt = new Date(event.created_at);
-                  const date = createdAt.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                  });
-                  const year = `${createdAt.getFullYear()}`;
-                  const id = `${date} ${year}`;
-                  const eventType = event.type || "unknown";
-                  eventsByDate[id] = {
-                    ...eventsByDate[id],
-                    [eventType]: eventsByDate[id]?.[eventType] ? [...eventsByDate[id][eventType], event] : [event],
-                  };
-                }
+                const eventType = event.type || "unknown";
+                eventsByType[eventType] = eventsByType[eventType] ? [...eventsByType[eventType], event] : [event];
               }
             }
-            return eventsByDate ? { ...restStatus, eventsByDate } : restStatus;
+            return eventsByType ? { ...restStatus, eventsByType } : restStatus;
           }),
         );
       }),

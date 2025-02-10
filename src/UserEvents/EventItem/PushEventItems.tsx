@@ -1,6 +1,6 @@
 import { GitCommitIcon, RepoPushIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
-import { plural } from "#utils";
+import { groupEventsByRepo, plural } from "#utils";
 import { memo, useMemo } from "react";
 
 import { type PushEvent } from "../interface";
@@ -12,55 +12,54 @@ export interface PushEventItemsProps {
 }
 
 export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function PushEventItems({ events }) {
-  const { commitsTotal, repos } = useMemo(() => {
-    const reposMap = new Map<string, { commits: number; events: PushEvent[]; name: string; url: string }>();
-    for (const event of events) {
-      let repo = reposMap.get(event.repo.name);
-      if (!repo) {
-        reposMap.set(
-          event.repo.name,
-          (repo = { commits: 0, events: [], name: event.repo.name, url: `https://github.com/${event.repo.name}` }),
-        );
-      }
-      repo.commits += event.payload.size;
-      repo.events.push(event);
-    }
-    const repos = [...reposMap.values()].sort((a, b) => b.commits - a.commits);
-    const commitsTotal = repos.reduce((sum, { commits }) => sum + commits, 0);
-    return { commitsTotal, repos };
+  let commitsTotal = 0;
+  const repos = useMemo(() => {
+    const repos = groupEventsByRepo(events);
+    commitsTotal = repos.reduce(
+      (acc, [, events]) => acc + events.reduce((acc, event) => acc + event.payload.size, 0),
+      0,
+    );
+    return repos.map(([repoName, events]) => (
+      <RepoSubList.RepoItem
+        key={repoName}
+        title={
+          <>
+            <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
+              {repoName}
+            </Link>
+            {events.length > 1 && `${events.length} commits`}
+          </>
+        }
+      >
+        {events.map(event =>
+          event.payload.commits.map(commit => <CommitItem key={commit.sha} commit={commit} repoName={repoName} />),
+        )}
+      </RepoSubList.RepoItem>
+    ));
   }, [events]);
   return (
     <EventItemLayout
       head={`Pushed ${plural(commitsTotal, "commit")} to ${plural(repos.length, "repository")}`}
       icon={<RepoPushIcon />}
     >
-      <RepoSubList.List>
-        {repos.map(({ commits, events, name, url }) => (
-          <RepoSubList.RepoItem
-            key={name}
-            title={
-              <>
-                <Link className="mr-2" href={url} target="_blank">
-                  {name}
-                </Link>
-                {commits > 1 && `${commits} commits`}
-              </>
-            }
-          >
-            {events.map(event =>
-              event.payload.commits.map(commit => (
-                <RepoSubList.SubItem
-                  key={commit.sha}
-                  icon={<GitCommitIcon className="text-color-[var(--fgColor-done)]" />}
-                  href={`https://github.com/${event.repo.name}/commit/${commit.sha}`}
-                >
-                  {commit.message.replace(/\n[\s\S]*$/, "")}
-                </RepoSubList.SubItem>
-              )),
-            )}
-          </RepoSubList.RepoItem>
-        ))}
-      </RepoSubList.List>
+      <RepoSubList.List>{repos}</RepoSubList.List>
     </EventItemLayout>
+  );
+});
+
+const CommitItem = /* @__PURE__ */ memo(function CommitItem({
+  repoName,
+  commit,
+}: {
+  repoName: string;
+  commit: PushEvent["payload"]["commits"][number];
+}) {
+  return (
+    <RepoSubList.SubItem
+      icon={<GitCommitIcon className="text-color-[var(--fgColor-done)]" />}
+      href={`https://github.com/${repoName}/commit/${commit.sha}`}
+    >
+      {commit.message.replace(/\n[\s\S]*$/, "")}
+    </RepoSubList.SubItem>
   );
 });

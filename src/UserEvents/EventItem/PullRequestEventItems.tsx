@@ -5,7 +5,7 @@ import {
   GitPullRequestIcon,
 } from "@primer/octicons-react";
 import { Link } from "@primer/react";
-import { plural } from "#utils";
+import { groupEventsByRepo, plural } from "#utils";
 import { memo, useMemo } from "react";
 
 import { type PullRequestEvent } from "../interface";
@@ -19,23 +19,27 @@ export interface PullRequestEventItemsProps {
 export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventItems({
   events,
 }: PullRequestEventItemsProps) {
-  const { prTotal, repos } = useMemo(() => {
-    const reposMap = new Map<string, { events: PullRequestEvent[]; name: string; url: string }>();
-    for (const event of events) {
-      if (event.payload.action === "opened" || event.payload.action === "reopened") {
-        let repo = reposMap.get(event.repo.name);
-        if (!repo) {
-          reposMap.set(
-            event.repo.name,
-            (repo = { events: [], name: event.repo.name, url: `https://github.com/${event.repo.name}` }),
-          );
+  const repos = useMemo(() => {
+    return groupEventsByRepo(
+      events,
+      event => event.payload.action === "opened" || event.payload.action === "reopened",
+    ).map(([repoName, events]) => (
+      <RepoSubList.RepoItem
+        key={repoName}
+        title={
+          <>
+            <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
+              {repoName}
+            </Link>
+            {events.length > 1 && `${events.length} issues`}
+          </>
         }
-        repo.events.push(event);
-      }
-    }
-    const repos = [...reposMap.values()].sort((a, b) => b.events.length - a.events.length);
-    const prTotal = repos.reduce((sum, { events }) => sum + events.length, 0);
-    return { prTotal, repos };
+      >
+        {events.map(event => (
+          <PRItem key={event.id} event={event} />
+        ))}
+      </RepoSubList.RepoItem>
+    ));
   }, [events]);
 
   if (!repos.length) {
@@ -44,47 +48,32 @@ export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventIte
 
   return (
     <EventItemLayout
-      head={`Opened ${plural(prTotal, "pull request")} in ${plural(repos.length, "repository")}`}
+      head={`Opened ${plural(events.length, "pull request")} in ${plural(repos.length, "repository")}`}
       icon={<GitPullRequestIcon />}
     >
-      <RepoSubList.List>
-        {repos.map(({ events, name, url }) => (
-          <RepoSubList.RepoItem
-            key={name}
-            title={
-              <>
-                <Link className="mr-2" href={url} target="_blank">
-                  {name}
-                </Link>
-                {events.length > 1 && `${events.length} issues`}
-              </>
-            }
-          >
-            {events.map(event => {
-              const pr = event.payload.pull_request;
-              return (
-                <RepoSubList.SubItem
-                  key={pr.id}
-                  icon={
-                    pr.merged ? (
-                      <GitMergeIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
-                    ) : pr.state === "closed" ? (
-                      <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
-                    ) : pr.draft ? (
-                      <GitPullRequestDraftIcon className="mt-[2px]" />
-                    ) : (
-                      <GitPullRequestIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
-                    )
-                  }
-                  href={pr.html_url}
-                >
-                  {pr.title}
-                </RepoSubList.SubItem>
-              );
-            })}
-          </RepoSubList.RepoItem>
-        ))}
-      </RepoSubList.List>
+      <RepoSubList.List>{repos}</RepoSubList.List>
     </EventItemLayout>
+  );
+});
+
+const PRItem = /* @__PURE__ */ memo(function PRItem({ event }: { event: PullRequestEvent }) {
+  const prItem = event.payload.pull_request;
+  return (
+    <RepoSubList.SubItem
+      icon={
+        prItem.merged ? (
+          <GitMergeIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
+        ) : prItem.state === "closed" ? (
+          <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
+        ) : prItem.draft ? (
+          <GitPullRequestDraftIcon className="mt-[2px]" />
+        ) : (
+          <GitPullRequestIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
+        )
+      }
+      href={prItem.html_url}
+    >
+      {prItem.title}
+    </RepoSubList.SubItem>
   );
 });
