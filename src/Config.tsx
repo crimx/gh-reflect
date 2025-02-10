@@ -1,4 +1,4 @@
-import { Button, FormControl, TextInput } from "@primer/react";
+import { Button, FormControl, Link, TextInput } from "@primer/react";
 import { useState } from "react";
 
 import { useLocalStorage } from "./useLocalStorage";
@@ -41,10 +41,17 @@ export function Config(props: ConfigProps) {
         <FormControl.Label>Personal Access Token</FormControl.Label>
         <FormControl.Caption>
           A{" "}
-          <a href="https://github.com/settings/tokens" target="_blank">
-            GitHub PAT
-          </a>{" "}
-          with <strong>xxx</strong> permission.
+          <Link href="https://github.com/settings/tokens" target="_blank">
+            Fine-grained access tokens
+          </Link>{" "}
+          with{" "}
+          <Link
+            href="https://docs.github.com/en/rest/activity/events?apiVersion=2022-11-28#list-organization-events-for-the-authenticated-user--fine-grained-access-tokens"
+            target="_blank"
+          >
+            <strong>"List organization events for the authenticated user"</strong>
+          </Link>{" "}
+          permission.
         </FormControl.Caption>
         <TextInput onChange={e => setToken(e.target.value)} type="password" value={token} />
       </FormControl>
