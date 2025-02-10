@@ -20,7 +20,7 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
       0,
     );
     return repos.map(([repoName, events]) => (
-      <RepoSubList.RepoItem
+      <RepoSubList.RepoItemExpandable
         key={repoName}
         title={
           <>
@@ -31,10 +31,12 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
           </>
         }
       >
-        {events.map(event =>
-          event.payload.commits.map(commit => <CommitItem key={commit.sha} commit={commit} repoName={repoName} />),
-        )}
-      </RepoSubList.RepoItem>
+        {() =>
+          events.map(event =>
+            event.payload.commits.map(commit => <CommitItem key={commit.sha} commit={commit} repoName={repoName} />),
+          )
+        }
+      </RepoSubList.RepoItemExpandable>
     ));
   }, [events]);
   return (

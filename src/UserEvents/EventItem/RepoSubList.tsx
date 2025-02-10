@@ -1,5 +1,8 @@
+import styles from "./RepoSubList.module.scss";
+
+import { FoldIcon, UnfoldIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
-import { type PropsWithChildren, type ReactNode } from "react";
+import { useState, type PropsWithChildren, type ReactNode } from "react";
 
 export const RepoSubList = {
   List: ({ children }: PropsWithChildren) => <ul className="list-none p-0 m-0">{children}</ul>,
@@ -9,6 +12,18 @@ export const RepoSubList = {
       <ul className="list-none p-0 m-0 pl-1">{children}</ul>
     </li>
   ),
+  RepoItemExpandable: ({ title, children }: { title: ReactNode; children: () => ReactNode }) => {
+    const [expanded, setExpand] = useState(false);
+    return (
+      <li className="mb-2">
+        <button className={styles.expandable} onClick={() => setExpand(expand => !expand)}>
+          {title}
+          {expanded ? <FoldIcon className="ml-auto" /> : <UnfoldIcon className="ml-auto" />}
+        </button>
+        {expanded && <ul className="list-none p-0 m-0 pl-1">{children()}</ul>}
+      </li>
+    );
+  },
   SubItem: ({ icon, href, children }: PropsWithChildren<{ icon: ReactNode; href: string }>) => (
     <li className="my-1 flex flex-nowrap">
       <span className="mt-[1px] mr-2">{icon}</span>

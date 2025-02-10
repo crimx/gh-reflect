@@ -1,15 +1,11 @@
-import {
-  GitMergeIcon,
-  GitPullRequestClosedIcon,
-  GitPullRequestDraftIcon,
-  GitPullRequestIcon,
-} from "@primer/octicons-react";
+import { GitPullRequestIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
 import { groupEventsByRepo, plural } from "#utils";
 import { memo, useMemo } from "react";
 
 import { type PullRequestEvent } from "../interface";
 import { EventItemLayout } from "./EventItemLayout";
+import { PullRequestItem } from "./PullRequestItem";
 import { RepoSubList } from "./RepoSubList";
 
 export interface PullRequestEventItemsProps {
@@ -36,7 +32,7 @@ export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventIte
         }
       >
         {events.map(event => (
-          <PRItem key={event.id} event={event} />
+          <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />
         ))}
       </RepoSubList.RepoItem>
     ));
@@ -53,27 +49,5 @@ export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventIte
     >
       <RepoSubList.List>{repos}</RepoSubList.List>
     </EventItemLayout>
-  );
-});
-
-const PRItem = /* @__PURE__ */ memo(function PRItem({ event }: { event: PullRequestEvent }) {
-  const prItem = event.payload.pull_request;
-  return (
-    <RepoSubList.SubItem
-      icon={
-        prItem.merged ? (
-          <GitMergeIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
-        ) : prItem.state === "closed" ? (
-          <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
-        ) : prItem.draft ? (
-          <GitPullRequestDraftIcon className="mt-[2px]" />
-        ) : (
-          <GitPullRequestIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
-        )
-      }
-      href={prItem.html_url}
-    >
-      {prItem.title}
-    </RepoSubList.SubItem>
   );
 });

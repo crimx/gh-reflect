@@ -5,9 +5,9 @@ import { type Observable } from "rxjs";
 import { Empty } from "./Empty";
 import { CreateEventItems } from "./EventItem/CreateEventItems";
 import { DeleteEventItems } from "./EventItem/DeleteEventItems";
-import { FallbackEventItems } from "./EventItem/FallbackEventItems";
 import { IssuesEventItems } from "./EventItem/IssuesEventItems";
 import { PullRequestEventItems } from "./EventItem/PullRequestEventItems";
+import { PullRequestReviewEventItems } from "./EventItem/PullRequestReviewEventItems";
 import { PushEventItems } from "./EventItem/PushEventItems";
 import {
   type CreateEvent,
@@ -15,6 +15,7 @@ import {
   type IssuesEvent,
   type PullRequestEvent,
   type PushEvent,
+  type PullRequestReviewEvent,
 } from "./interface";
 import { type UseEventsFetchStatus } from "./useUserEvents";
 
@@ -31,12 +32,12 @@ export const UserEvents = /* @__PURE__ */ memo<UserEventsProps>(function UserEve
       PullRequestEvent,
       IssuesEvent,
       PushEvent,
-      // PullRequestReviewEvent,
+      PullRequestReviewEvent,
       // PullRequestReviewCommentEvent,
       // CommitCommentEvent,
       // IssueCommentEvent,
       DeleteEvent,
-      ...restEvents
+      // ...restEvents
     } = status.eventsByType;
 
     return (
@@ -44,11 +45,14 @@ export const UserEvents = /* @__PURE__ */ memo<UserEventsProps>(function UserEve
         {PullRequestEvent && <PullRequestEventItems events={PullRequestEvent as PullRequestEvent[]} />}
         {IssuesEvent && <IssuesEventItems events={IssuesEvent as IssuesEvent[]} />}
         {PushEvent && <PushEventItems events={PushEvent as PushEvent[]} />}
+        {PullRequestReviewEvent && (
+          <PullRequestReviewEventItems events={PullRequestReviewEvent as PullRequestReviewEvent[]} />
+        )}
         {CreateEvent && <CreateEventItems events={CreateEvent as CreateEvent[]} />}
         {DeleteEvent && <DeleteEventItems events={DeleteEvent as DeleteEvent[]} />}
-        {Object.entries(restEvents).map(([eventType, events]) => (
+        {/* {Object.entries(restEvents).map(([eventType, events]) => (
           <FallbackEventItems key={eventType} events={events} />
-        ))}
+        ))} */}
       </div>
     );
   }
