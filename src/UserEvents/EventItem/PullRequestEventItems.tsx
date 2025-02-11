@@ -1,4 +1,4 @@
-import { GitPullRequestClosedIcon, GitPullRequestIcon } from "@primer/octicons-react";
+import { GitPullRequestIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
 import { groupEventsByRepo, plural } from "#utils";
 import { memo, useMemo } from "react";
@@ -106,7 +106,7 @@ export const PullRequestClosedEventItems = ({ events }: PullRequestEventItemsPro
   return (
     <EventItemLayout
       head={`Closed ${plural(prCount, "pull request")} in ${plural(repos.length, "repository")}`}
-      icon={<GitPullRequestClosedIcon />}
+      icon={<GitPullRequestIcon />}
     >
       <RepoSubList.List>{repos}</RepoSubList.List>
     </EventItemLayout>
