@@ -8,7 +8,7 @@ import { useEvents } from "./UserEvents/useUserEvents";
 
 export function App() {
   const [colorMode] = useLocalStorage<"auto" | "day" | "night">("gh-reflect.colorMode", "auto");
-  const [status$, setOptions] = useEvents();
+  const [setOptions, status$] = useEvents();
   return (
     <ThemeProvider colorMode={colorMode}>
       <BaseStyles>

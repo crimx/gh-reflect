@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { BehaviorSubject, EMPTY, expand, type Observable, of, scan, switchMap } from "rxjs";
+import { useObservableCallback } from "observable-hooks";
+import { EMPTY, expand, type Observable, of, scan, switchMap } from "rxjs";
 
 import { type Options } from "../Config";
 import { fetchEvents, type FetchStatus } from "./fetchEvents";
@@ -9,11 +9,9 @@ export interface UseEventsFetchStatus extends Omit<FetchStatus, "events"> {
   readonly eventsByType?: Record<string, GitHubEvent[]>;
 }
 
-export const useEvents = (): [Observable<UseEventsFetchStatus>, (options: Options | undefined) => void] => {
-  const [options$$] = useState(() => new BehaviorSubject<Options | undefined>(undefined));
-  const setOptions = useCallback((options: Options | undefined) => options$$.next(options), [options$$]);
-  const status$ = useMemo(() => {
-    return options$$.pipe(
+export const useEvents = (): [(options: Options | undefined) => void, Observable<UseEventsFetchStatus>] => {
+  return useObservableCallback<UseEventsFetchStatus, Options | undefined>(options$ =>
+    options$.pipe(
       switchMap(options => {
         if (!options) {
           return of<FetchStatus>({ fetching: false, page: 0 });
@@ -42,7 +40,6 @@ export const useEvents = (): [Observable<UseEventsFetchStatus>, (options: Option
           }),
         );
       }),
-    );
-  }, [options$$]);
-  return [status$, setOptions];
+    ),
+  );
 };
