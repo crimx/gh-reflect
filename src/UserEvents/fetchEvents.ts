@@ -20,7 +20,7 @@ export const fetchEvents = (username: string, token?: string, page = 1): Observa
   if (token) {
     headers.Authorization = "Bearer " + token;
   }
-  return fromFetch(`https://api.github.com/users/${username}/events?per_page=100&page=${page}`, {
+  return fromFetch(`https://api.github.com/users/${username}/events?per_page=50&page=${page}`, {
     headers,
   }).pipe(
     switchMap(async (response: Response): Promise<FetchStatus> => {
