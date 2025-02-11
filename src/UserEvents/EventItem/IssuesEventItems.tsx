@@ -21,7 +21,7 @@ export const IssuesEventItems = /* @__PURE__ */ memo(function IssueEventItems({ 
             <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
               {repoName}
             </Link>
-            {events.length > 1 && `${events.length} issues`}
+            {plural(events.length, "issue")}
           </>
         }
       >

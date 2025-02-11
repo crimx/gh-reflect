@@ -12,14 +12,9 @@ export interface PushEventItemsProps {
 }
 
 export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function PushEventItems({ events }) {
-  let commitsTotal = 0;
-  const repos = useMemo(() => {
-    const repos = groupEventsByRepo(events);
-    commitsTotal = repos.reduce(
-      (acc, [, events]) => acc + events.reduce((acc, event) => acc + event.payload.size, 0),
-      0,
-    );
-    return repos.map(([repoName, events]) => (
+  const [repos, commitsCount] = useMemo(() => {
+    let commitsCount = 0;
+    const repos = groupEventsByRepo(events).map(([repoName, events]) => (
       <RepoSubList.RepoItemExpandable
         key={repoName}
         title={
@@ -27,21 +22,25 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
             <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
               {repoName}
             </Link>
-            {events.length > 1 && `${events.length} commits`}
+            {plural(events.length, "commit")}
           </>
         }
       >
         {() =>
-          events.map(event =>
-            event.payload.commits.map(commit => <CommitItem key={commit.sha} commit={commit} repoName={repoName} />),
-          )
+          events.map(event => {
+            commitsCount += event.payload.commits.length;
+            return event.payload.commits.map(commit => (
+              <CommitItem key={commit.sha} commit={commit} repoName={repoName} />
+            ));
+          })
         }
       </RepoSubList.RepoItemExpandable>
     ));
+    return [repos, commitsCount];
   }, [events]);
   return (
     <EventItemLayout
-      head={`Pushed ${plural(commitsTotal, "commit")} to ${plural(repos.length, "repository")}`}
+      head={`Pushed ${plural(commitsCount, "commit")} to ${plural(repos.length, "repository")}`}
       icon={<RepoPushIcon />}
     >
       <RepoSubList.List>{repos}</RepoSubList.List>

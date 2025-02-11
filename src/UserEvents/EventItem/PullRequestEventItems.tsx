@@ -1,4 +1,4 @@
-import { GitPullRequestIcon } from "@primer/octicons-react";
+import { GitPullRequestClosedIcon, GitPullRequestIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
 import { groupEventsByRepo, plural } from "#utils";
 import { memo, useMemo } from "react";
@@ -12,30 +12,44 @@ export interface PullRequestEventItemsProps {
   events: PullRequestEvent[];
 }
 
-export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventItems({
+export const PullRequestEventItems = /* @__PURE__ */ memo(function PullRequestEventItems({
   events,
 }: PullRequestEventItemsProps) {
-  const repos = useMemo(() => {
-    return groupEventsByRepo(
+  return (
+    <>
+      <PullRequestOpenEventItems events={events} />
+      <PullRequestClosedEventItems events={events} />
+    </>
+  );
+});
+
+export const PullRequestOpenEventItems = ({ events }: PullRequestEventItemsProps) => {
+  const [repos, prCount] = useMemo(() => {
+    let prCount = 0;
+    const repos = groupEventsByRepo(
       events,
       event => event.payload.action === "opened" || event.payload.action === "reopened",
-    ).map(([repoName, events]) => (
-      <RepoSubList.RepoItem
-        key={repoName}
-        title={
-          <>
-            <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
-              {repoName}
-            </Link>
-            {events.length > 1 && `${events.length} issues`}
-          </>
-        }
-      >
-        {events.map(event => (
-          <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />
-        ))}
-      </RepoSubList.RepoItem>
-    ));
+    ).map(([repoName, events]) => {
+      prCount += events.length;
+      return (
+        <RepoSubList.RepoItem
+          key={repoName}
+          title={
+            <>
+              <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
+                {repoName}
+              </Link>
+              {plural(events.length, "pull request")}
+            </>
+          }
+        >
+          {events.map(event => (
+            <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />
+          ))}
+        </RepoSubList.RepoItem>
+      );
+    });
+    return [repos, prCount];
   }, [events]);
 
   if (!repos.length) {
@@ -44,10 +58,61 @@ export const PullRequestEventItems = /* @__PURE__ */ memo(function IssueEventIte
 
   return (
     <EventItemLayout
-      head={`Opened ${plural(events.length, "pull request")} in ${plural(repos.length, "repository")}`}
+      head={`Opened ${plural(prCount, "pull request")} in ${plural(repos.length, "repository")}`}
       icon={<GitPullRequestIcon />}
     >
       <RepoSubList.List>{repos}</RepoSubList.List>
     </EventItemLayout>
   );
-});
+};
+
+export const PullRequestClosedEventItems = ({ events }: PullRequestEventItemsProps) => {
+  const [repos, prCount] = useMemo(() => {
+    let prCount = 0;
+    const repos = groupEventsByRepo(events, event => event.payload.action === "closed").map(([repoName, events]) => {
+      prCount += events.length;
+
+      const title = (
+        <>
+          <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
+            {repoName}
+          </Link>
+          {plural(events.length, "pull request")}
+        </>
+      );
+
+      const items = () =>
+        events.map(event => <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />);
+
+      if (events.some(isHumanPR)) {
+        <RepoSubList.RepoItem key={repoName} title={title}>
+          {items()}
+        </RepoSubList.RepoItem>;
+      }
+
+      return (
+        <RepoSubList.RepoItemExpandable key={repoName} title={title}>
+          {items}
+        </RepoSubList.RepoItemExpandable>
+      );
+    });
+    return [repos, prCount];
+  }, [events]);
+
+  if (!repos.length) {
+    return null;
+  }
+
+  return (
+    <EventItemLayout
+      head={`Closed ${plural(prCount, "pull request")} in ${plural(repos.length, "repository")}`}
+      icon={<GitPullRequestClosedIcon />}
+    >
+      <RepoSubList.List>{repos}</RepoSubList.List>
+    </EventItemLayout>
+  );
+};
+
+const isHumanPR = (event: PullRequestEvent): boolean =>
+  event.payload.pull_request.user.type !== "Bot" &&
+  !event.payload.pull_request.body?.includes("This PR was generated with [Release Please]");

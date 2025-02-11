@@ -20,7 +20,7 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
         pullRequest.merged ? (
           <GitMergeIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
         ) : pullRequest.state === "closed" ? (
-          <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
+          <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-closed)]" />
         ) : pullRequest.draft ? (
           <GitPullRequestDraftIcon className="mt-[2px]" />
         ) : (
