@@ -13,7 +13,10 @@ export interface PushEventItemsProps {
 
 export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function PushEventItems({ events }) {
   const [repos, commitsCount] = useMemo(() => {
-    let commitsCount = 0;
+    const commitsCount = events.reduce(
+      (acc, event) => acc + Math.max(event.payload.size, event.payload.commits.length),
+      0,
+    );
     const repos = groupEventsByRepo(events).map(([repoName, events]) => (
       <RepoSubList.RepoItemExpandable
         key={repoName}
@@ -28,7 +31,6 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
       >
         {() =>
           events.map(event => {
-            commitsCount += event.payload.commits.length;
             return event.payload.commits.map(commit => (
               <CommitItem key={commit.sha} commit={commit} repoName={repoName} />
             ));
