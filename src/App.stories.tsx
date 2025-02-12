@@ -57,6 +57,8 @@ export const Overview: StoryObj = {
 
           if (page > 1) {
             await delay(1000);
+          } else {
+            await delay(5000);
           }
 
           return HttpResponse.json(events, {

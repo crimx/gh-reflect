@@ -1,3 +1,4 @@
+import { SkeletonText } from "@primer/react/experimental";
 import { useObservableState } from "observable-hooks";
 import { memo } from "react";
 import { type Observable } from "rxjs";
@@ -53,6 +54,14 @@ export const UserEvents = /* @__PURE__ */ memo<UserEventsProps>(function UserEve
         {/* {Object.entries(restEvents).map(([eventType, events]) => (
           <FallbackEventItems key={eventType} events={events} />
         ))} */}
+      </div>
+    );
+  }
+
+  if (status?.fetching) {
+    return (
+      <div className="p-4">
+        <SkeletonText lines={5} size="bodyLarge" />
       </div>
     );
   }

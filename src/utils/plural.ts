@@ -4,6 +4,7 @@ const config = {
   repository: "repositories",
   "pull request": "pull requests",
   review: "reviews",
+  page: "pages",
 };
 
 export const plural = (count: number, word: keyof typeof config): string =>

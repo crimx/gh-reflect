@@ -2,9 +2,9 @@ import { BaseStyles, SplitPageLayout, ThemeProvider } from "@primer/react";
 
 import { Config } from "./Config";
 import { Header } from "./Header";
+import { Status } from "./Status";
 import { useLocalStorage } from "./useLocalStorage";
-import { UserEvents } from "./UserEvents/UserEvents";
-import { useEvents } from "./UserEvents/useUserEvents";
+import { useEvents, UserEvents } from "./UserEvents";
 
 export function App() {
   const [colorMode] = useLocalStorage<"auto" | "day" | "night">("gh-reflect.colorMode", "auto");
@@ -17,6 +17,9 @@ export function App() {
             <Header />
           </SplitPageLayout.Header>
           <SplitPageLayout.Content className="z-0 [&>div]:p-0 min-h-[var(--sticky-pane-height)]">
+            <div className="p4 font-mono">
+              <Status status$={status$} />
+            </div>
             <UserEvents status$={status$} />
           </SplitPageLayout.Content>
           <SplitPageLayout.Pane

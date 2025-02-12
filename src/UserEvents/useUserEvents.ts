@@ -7,6 +7,7 @@ import { type GitHubEvent } from "./schema.interface";
 
 export interface UseEventsFetchStatus extends Omit<FetchStatus, "events"> {
   readonly eventsByType?: Record<string, GitHubEvent[]>;
+  readonly eventsCount?: number;
 }
 
 export const useEvents = (): [(options: Options | undefined) => void, Observable<UseEventsFetchStatus>] => {
@@ -27,8 +28,11 @@ export const useEvents = (): [(options: Options | undefined) => void, Observable
             return EMPTY;
           }),
           scan((acc: UseEventsFetchStatus, status: FetchStatus): UseEventsFetchStatus => {
-            let eventsByType = acc.eventsByType;
             const { events, ...restStatus } = status;
+            const eventsCount = (acc.eventsCount || 0) + (events?.length || 0);
+            const limit = status.limit ?? acc.limit;
+            const remaining = status.remaining ?? acc.remaining;
+            let eventsByType = acc.eventsByType;
             if (events?.length) {
               eventsByType = { ...eventsByType };
               for (const event of events) {
@@ -36,7 +40,7 @@ export const useEvents = (): [(options: Options | undefined) => void, Observable
                 eventsByType[eventType] = eventsByType[eventType] ? [...eventsByType[eventType], event] : [event];
               }
             }
-            return eventsByType ? { ...restStatus, eventsByType } : restStatus;
+            return { ...restStatus, eventsByType, eventsCount, limit, remaining };
           }),
         );
       }),

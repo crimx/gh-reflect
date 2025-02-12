@@ -80,6 +80,6 @@ function getDateInLocalTZ(d: Date): string {
 
 function getLastSatInLocalTZ() {
   const now = new Date();
-  now.setDate(now.getDate() - ((now.getDay() + 7 - 6) % 7) - (now.getDay() < 6 ? 7 : 0));
+  now.setDate(now.getDate() - ((now.getDay() + 7 - 6) % 7) - (now.getDay() < 2 ? 7 : 0));
   return getDateInLocalTZ(now);
 }
