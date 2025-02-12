@@ -13,10 +13,7 @@ export interface PushEventItemsProps {
 
 export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function PushEventItems({ events }) {
   const [repos, commitsCount] = useMemo(() => {
-    const commitsCount = events.reduce(
-      (acc, event) => acc + Math.max(event.payload.size, event.payload.commits.length),
-      0,
-    );
+    const commitsCount = getCommitsCount(events);
     const repos = groupEventsByRepo(events).map(([repoName, events]) => (
       <RepoSubList.RepoItemExpandable
         key={repoName}
@@ -25,7 +22,7 @@ export const PushEventItems = /* @__PURE__ */ memo<PushEventItemsProps>(function
             <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
               {repoName}
             </Link>
-            {plural(events.length, "commit")}
+            {plural(getCommitsCount(events), "commit")}
           </>
         }
       >
@@ -66,3 +63,6 @@ const CommitItem = /* @__PURE__ */ memo(function CommitItem({
     </RepoSubList.SubItem>
   );
 });
+
+const getCommitsCount = (events: PushEvent[]): number =>
+  events.reduce((acc, event) => acc + Math.max(event.payload.size, event.payload.commits.length), 0);
