@@ -25,7 +25,7 @@ export const PullRequestReviewEventItems = /* @__PURE__ */ memo(function PullReq
               <Link className="mr-2" href={`https://github.com/${repoName}`} target="_blank">
                 {repoName}
               </Link>
-              {events.length > 1 && `${events.length} reviews`}
+              {plural(events.length, "review")}
             </>
           }
         >
