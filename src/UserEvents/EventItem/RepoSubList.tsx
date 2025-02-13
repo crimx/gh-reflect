@@ -16,7 +16,14 @@ export const RepoSubList = {
     const [expanded, setExpand] = useState(false);
     return (
       <li className="mb-2">
-        <button className={styles.expandable} onClick={() => setExpand(expand => !expand)}>
+        <button
+          className={styles.expandable}
+          onClick={e => {
+            if (!(e.target as Element).closest?.("a")) {
+              setExpand(expanded => !expanded);
+            }
+          }}
+        >
           {title}
           {expanded ? <FoldIcon className="ml-auto" /> : <UnfoldIcon className="ml-auto" />}
         </button>
