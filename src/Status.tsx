@@ -1,18 +1,14 @@
 import { Spinner } from "@primer/react";
 import { Banner } from "@primer/react/experimental";
 import { plural } from "#utils";
-import { useObservableState } from "observable-hooks";
-import { type Observable } from "rxjs";
 
 import { type UseEventsFetchStatus } from "./UserEvents";
 
 export interface StatusProps {
-  status$: Observable<UseEventsFetchStatus>;
+  status: UseEventsFetchStatus | undefined;
 }
 
-export const Status = ({ status$ }: StatusProps) => {
-  const status = useObservableState(status$);
-
+export const Status = ({ status }: StatusProps) => {
   if (!status?.page) {
     return null;
   }

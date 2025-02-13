@@ -1,7 +1,4 @@
 import { SkeletonText } from "@primer/react/experimental";
-import { useObservableState } from "observable-hooks";
-import { memo } from "react";
-import { type Observable } from "rxjs";
 
 import { Empty } from "./Empty";
 import { CreateEventItems } from "./EventItem/CreateEventItems";
@@ -15,18 +12,16 @@ import {
   type DeleteEvent,
   type IssuesEvent,
   type PullRequestEvent,
-  type PushEvent,
   type PullRequestReviewEvent,
+  type PushEvent,
 } from "./interface";
 import { type UseEventsFetchStatus } from "./useUserEvents";
 
 export interface UserEventsProps {
-  status$: Observable<UseEventsFetchStatus>;
+  status: UseEventsFetchStatus | undefined;
 }
 
-export const UserEvents = /* @__PURE__ */ memo<UserEventsProps>(function UserEvents({ status$ }) {
-  const status = useObservableState(status$);
-
+export const UserEvents = ({ status }: UserEventsProps) => {
   if (status?.eventsByType) {
     const {
       CreateEvent,
@@ -67,4 +62,4 @@ export const UserEvents = /* @__PURE__ */ memo<UserEventsProps>(function UserEve
   }
 
   return <Empty />;
-});
+};
