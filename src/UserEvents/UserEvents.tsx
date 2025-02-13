@@ -7,7 +7,9 @@ import { IssuesEventItems } from "./EventItem/IssuesEventItems";
 import { PullRequestEventItems } from "./EventItem/PullRequestEventItems";
 import { PullRequestReviewEventItems } from "./EventItem/PullRequestReviewEventItems";
 import { PushEventItems } from "./EventItem/PushEventItems";
+import { WatchEventItems } from "./EventItem/WatchEventItems";
 import {
+  type WatchEvent,
   type CreateEvent,
   type DeleteEvent,
   type IssuesEvent,
@@ -32,6 +34,7 @@ export const UserEvents = ({ status }: UserEventsProps) => {
       // PullRequestReviewCommentEvent,
       // CommitCommentEvent,
       // IssueCommentEvent,
+      WatchEvent,
       DeleteEvent,
       // ...restEvents
     } = status.eventsByType;
@@ -45,6 +48,7 @@ export const UserEvents = ({ status }: UserEventsProps) => {
           <PullRequestReviewEventItems events={PullRequestReviewEvent as PullRequestReviewEvent[]} />
         )}
         {CreateEvent && <CreateEventItems events={CreateEvent as CreateEvent[]} />}
+        {WatchEvent && <WatchEventItems events={WatchEvent as WatchEvent[]} />}
         {DeleteEvent && <DeleteEventItems events={DeleteEvent as DeleteEvent[]} />}
         {/* {Object.entries(restEvents).map(([eventType, events]) => (
           <FallbackEventItems key={eventType} events={events} />
