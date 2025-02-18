@@ -18,7 +18,7 @@ const nowInLocalTZ = /* @__PURE__ */ getDateInLocalTZ(new Date());
 export function Config(props: ConfigProps) {
   const [name, setName] = useLocalStorage("gh-reflect.name", "");
   const [token, setToken] = useLocalStorage("gh-reflect.token", "");
-  const [sinceInLocalTZ, setSinceInLocalTZ] = useState(getLastSatInLocalTZ);
+  const [sinceInLocalTZ, setSinceInLocalTZ] = useState(getLastMondayInLocalTZ);
 
   const hasNameError = !name;
   const hasError = hasNameError;
@@ -78,8 +78,8 @@ function getDateInLocalTZ(d: Date): string {
   return `${d.getFullYear()}-${month}-${date}`;
 }
 
-function getLastSatInLocalTZ() {
+function getLastMondayInLocalTZ() {
   const now = new Date();
-  now.setDate(now.getDate() - ((now.getDay() + 7 - 6) % 7) - (now.getDay() < 2 ? 7 : 0));
+  now.setDate(now.getDate() - ((now.getDay() + 7 - 1) % 7) - (now.getDay() < 2 ? 7 : 0));
   return getDateInLocalTZ(now);
 }
