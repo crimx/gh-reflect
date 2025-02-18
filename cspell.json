@@ -18,6 +18,7 @@
     "preinstall",
     "rebaseable",
     "signoff",
+    "tagfilter",
     "treeshake",
     "tsup",
     "typedoc",

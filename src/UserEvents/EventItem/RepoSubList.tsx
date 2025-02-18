@@ -31,12 +31,16 @@ export const RepoSubList = {
       </li>
     );
   },
-  SubItem: ({ icon, href, children }: PropsWithChildren<{ icon: ReactNode; href: string }>) => (
+  SubItem: ({ icon, href, children }: PropsWithChildren<{ icon: ReactNode; href?: string }>) => (
     <li className="my-1 flex flex-nowrap">
       <span className="mt-[1px] mr-2">{icon}</span>
-      <Link className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]" href={href} target="_blank">
-        {children}
-      </Link>
+      {href ? (
+        <Link className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]" href={href} target="_blank">
+          {children}
+        </Link>
+      ) : (
+        children
+      )}
     </li>
   ),
 };

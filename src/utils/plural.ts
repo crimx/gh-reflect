@@ -1,5 +1,6 @@
 const config = {
   commit: "commits",
+  comment: "comments",
   issue: "issues",
   repository: "repositories",
   "pull request": "pull requests",

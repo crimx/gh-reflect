@@ -1,7 +1,8 @@
-import { defineConfig, presetIcons, presetWind } from "unocss";
+import { defineConfig, presetIcons, presetWind, presetMini } from "unocss";
 
 export default defineConfig({
   presets: [
+    presetMini(),
     presetIcons({
       cdn: "https://esm.sh/",
       extraProperties: {

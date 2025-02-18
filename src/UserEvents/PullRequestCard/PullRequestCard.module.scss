@@ -1,0 +1,16 @@
+.md {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  max-width: 306px;
+
+  * {
+    font-size: small !important;
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

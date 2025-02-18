@@ -1,11 +1,10 @@
-import {
-  GitMergeIcon,
-  GitPullRequestClosedIcon,
-  GitPullRequestDraftIcon,
-  GitPullRequestIcon,
-} from "@primer/octicons-react";
-import { memo } from "react";
+import { Link, Popover } from "@primer/react";
+import { useObservableState } from "observable-hooks";
+import { memo, useState } from "react";
+import { BehaviorSubject } from "rxjs";
 
+import { PullRequestCard } from "../PullRequestCard";
+import { PullRequestIcon } from "../PullRequestIcon";
 import { type PullRequest } from "../schema.interface";
 import { RepoSubList } from "./RepoSubList";
 
@@ -13,23 +12,52 @@ export interface PullRequestItemProps {
   pullRequest: PullRequest;
 }
 
+let _popId = 0;
+const nextPopId = (): number => (_popId += 1) | 0;
+const openId$ = /* @__PURE__ */ new BehaviorSubject<number | null>(null);
+let ticket: ReturnType<typeof setTimeout> | null = null;
+
 export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(function PullRequestItem({ pullRequest }) {
-  return (
-    <RepoSubList.SubItem
-      icon={
-        pullRequest.merged ? (
-          <GitMergeIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
-        ) : pullRequest.state === "closed" ? (
-          <GitPullRequestClosedIcon className="mt-[2px] text-color-[var(--fgColor-closed)]" />
-        ) : pullRequest.draft ? (
-          <GitPullRequestDraftIcon className="mt-[2px]" />
-        ) : (
-          <GitPullRequestIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
-        )
+  const openId = useObservableState(openId$);
+  const [popId] = useState(nextPopId);
+
+  const open = (): void => {
+    if (ticket !== null) {
+      clearTimeout(ticket);
+    }
+    openId$.next(popId);
+  };
+  const close = (): void => {
+    if (ticket !== null) {
+      clearTimeout(ticket);
+    }
+    ticket = setTimeout(() => {
+      if (openId$.value === popId) {
+        openId$.next(null);
       }
-      href={pullRequest.html_url}
-    >
-      {pullRequest.title}
+    }, 1000);
+  };
+
+  return (
+    <RepoSubList.SubItem icon={<PullRequestIcon pullRequest={pullRequest} />}>
+      <div className="relative">
+        <Link
+          className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]"
+          href={pullRequest.html_url}
+          target="_blank"
+          onMouseOver={open}
+          onMouseOut={close}
+        >
+          {pullRequest.title}
+        </Link>
+        {openId === popId && (
+          <Popover open className="top-100% left-5 translate-y-10px">
+            <Popover.Content className="w-sm! p-2! [&::before]:left-30px! [&::after]:left-30px!">
+              <PullRequestCard pullRequest={pullRequest} onMouseOver={open} onMouseOut={close} />
+            </Popover.Content>
+          </Popover>
+        )}
+      </div>
     </RepoSubList.SubItem>
   );
 });
