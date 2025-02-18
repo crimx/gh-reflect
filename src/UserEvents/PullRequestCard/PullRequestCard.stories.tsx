@@ -23,6 +23,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Overview: Story = {
   args: {
-    event: faker.helpers.arrayElement(PullRequestEventFixture as PullRequestEvent[]),
+    pullRequest: faker.helpers.arrayElement(PullRequestEventFixture as PullRequestEvent[]).payload.pull_request,
   },
 };
