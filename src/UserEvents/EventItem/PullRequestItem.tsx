@@ -25,7 +25,13 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
     if (ticket !== null) {
       clearTimeout(ticket);
     }
-    openId$.next(popId);
+    if (openId$.value === null) {
+      openId$.next(popId);
+    } else {
+      ticket = setTimeout(() => {
+        openId$.next(popId);
+      }, 200);
+    }
   };
   const close = (): void => {
     if (ticket !== null) {
@@ -51,7 +57,7 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
           {pullRequest.title}
         </Link>
         {openId === popId && (
-          <Popover open className="top-100% left-5 translate-y-10px">
+          <Popover open className="top-100% left-5 translate-y-2">
             <Popover.Content className="w-sm! p-2! [&::before]:left-30px! [&::after]:left-30px!">
               <PullRequestCard pullRequest={pullRequest} onMouseOver={open} onMouseOut={close} />
             </Popover.Content>

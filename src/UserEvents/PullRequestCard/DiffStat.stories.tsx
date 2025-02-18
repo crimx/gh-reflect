@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import { type Meta, type StoryObj } from "@storybook/react";
 
 import { DiffStat } from "./DiffStat";

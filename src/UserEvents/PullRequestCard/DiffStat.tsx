@@ -1,3 +1,5 @@
+import styles from "./DiffStat.module.scss";
+
 import { clsx } from "clsx";
 import { memo } from "react";
 
@@ -21,7 +23,7 @@ export const DiffStat = /* @__PURE__ */ memo(function DiffStat({ additions, dele
   return (
     <span className="text-xs color-[var(--fgColor-muted)] whitespace-nowrap font-600 cursor-default">
       <span className="color-[var(--fgColor-success)]"> +{additions} </span>{" "}
-      <span className="color-[var(--fgColor-danger)]"> -{deletions} </span>{" "}
+      <span className={`color-[var(--fgColor-danger)] ${styles.darkDangerVisualFix}`}> -{deletions} </span>{" "}
       {Array.from({ length: GRAPH_WIDTH }, (_, i) => (
         <span
           key={i}
@@ -30,7 +32,7 @@ export const DiffStat = /* @__PURE__ */ memo(function DiffStat({ additions, dele
             i < added
               ? "bg-[var(--bgColor-success-emphasis)]"
               : i < added + removed
-                ? "bg-[var(--bgColor-danger-emphasis)]"
+                ? `bg-[var(--bgColor-danger-emphasis)] ${styles.darkDangerVisualFix}`
                 : "bg-[var(--bgColor-neutral-muted)]",
           )}
         />
