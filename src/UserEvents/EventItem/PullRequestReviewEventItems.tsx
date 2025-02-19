@@ -29,7 +29,15 @@ export const PullRequestReviewEventItems = /* @__PURE__ */ memo(function PullReq
             </>
           }
         >
-          {() => events.map(event => <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />)}
+          {() =>
+            events.map(event => (
+              <PullRequestItem
+                key={event.id}
+                pullRequest={event.payload.pull_request}
+                date={event.payload.review.submitted_at}
+              />
+            ))
+          }
         </RepoSubList.RepoItemExpandable>
       );
     });
