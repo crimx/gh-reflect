@@ -16,7 +16,7 @@ export interface PullRequestCardProps
 
 export const PullRequestCard = ({ pullRequest, className, ...props }: PullRequestCardProps) => {
   return (
-    <div {...props} className={clsx("p-3", className)}>
+    <div {...props} className={clsx("p-4", className)}>
       <PullRequestIcon pullRequest={pullRequest} className="float-left mt-1" />
       <div className="ml-6">
         <h3 className="line-height-tight my-0">

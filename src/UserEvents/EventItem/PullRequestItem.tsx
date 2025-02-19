@@ -57,8 +57,8 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
           {pullRequest.title}
         </Link>
         {openId === popId && (
-          <Popover open className="top-100% left-5 translate-y-2">
-            <Popover.Content className="w-sm! p-2! [&::before]:left-30px! [&::after]:left-30px!">
+          <Popover open className="top-100% left-5 translate-y-2 rounded-md shadow-lg">
+            <Popover.Content className="w-sm! p-0! [&::before]:left-30px! [&::after]:left-30px!">
               <PullRequestCard pullRequest={pullRequest} onMouseOver={open} onMouseOut={close} />
             </Popover.Content>
           </Popover>
