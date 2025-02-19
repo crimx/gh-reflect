@@ -1,5 +1,3 @@
-import styles from "./RepoSubList.module.scss";
-
 import { FoldIcon, UnfoldIcon } from "@primer/octicons-react";
 import { Link } from "@primer/react";
 import { useState, type PropsWithChildren, type ReactNode } from "react";
@@ -15,9 +13,9 @@ export const RepoSubList = {
   RepoItemExpandable: ({ title, children }: { title: ReactNode; children: () => ReactNode }) => {
     const [expanded, setExpand] = useState(false);
     return (
-      <li className="mb-2">
+      <li>
         <button
-          className={styles.expandable}
+          className="btn p-1 w-full text-left flex flex-nowrap items-center overflow-hidden hover:bg-[--bgColor-muted] focus:bg-[--bgColor-muted]"
           onClick={e => {
             if (!(e.target as Element).closest?.("a")) {
               setExpand(expanded => !expanded);
@@ -31,8 +29,8 @@ export const RepoSubList = {
       </li>
     );
   },
-  SubItem: ({ icon, href, children }: PropsWithChildren<{ icon: ReactNode; href?: string }>) => (
-    <li className="my-1 flex flex-nowrap">
+  SubItem: ({ icon, href, date, children }: PropsWithChildren<{ icon: ReactNode; date?: string; href?: string }>) => (
+    <li className="p-[2px] flex flex-nowrap hover:bg-[--bgColor-muted]">
       <span className="mt-[1px] mr-2">{icon}</span>
       {href ? (
         <Link className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]" href={href} target="_blank">
@@ -40,6 +38,13 @@ export const RepoSubList = {
         </Link>
       ) : (
         children
+      )}
+      {date && (
+        <span className="ml-auto">
+          <span className="ml-1 mt-1 color-[--fgColor-muted] text-xs whitespace-nowrap">
+            {new Date(date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+          </span>
+        </span>
       )}
     </li>
   ),

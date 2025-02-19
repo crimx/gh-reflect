@@ -62,6 +62,7 @@ const IssueItem = /* @__PURE__ */ memo(function IssueItem({ event }: { event: Is
         )
       }
       href={issue.html_url}
+      date={issue.created_at}
     >
       {issue.title}
     </RepoSubList.SubItem>

@@ -10,6 +10,7 @@ import { RepoSubList } from "./RepoSubList";
 
 export interface PullRequestItemProps {
   pullRequest: PullRequest;
+  date: string;
 }
 
 let _popId = 0;
@@ -17,7 +18,10 @@ const nextPopId = (): number => (_popId += 1) | 0;
 const openId$ = /* @__PURE__ */ new BehaviorSubject<number | null>(null);
 let ticket: ReturnType<typeof setTimeout> | null = null;
 
-export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(function PullRequestItem({ pullRequest }) {
+export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(function PullRequestItem({
+  pullRequest,
+  date,
+}) {
   const openId = useObservableState(openId$);
   const [popId] = useState(nextPopId);
 
@@ -45,7 +49,7 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
   };
 
   return (
-    <RepoSubList.SubItem icon={<PullRequestIcon pullRequest={pullRequest} />}>
+    <RepoSubList.SubItem icon={<PullRequestIcon pullRequest={pullRequest} />} date={date}>
       <div className="relative">
         <Link
           className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]"

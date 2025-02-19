@@ -44,7 +44,11 @@ export const PullRequestOpenEventItems = ({ events }: PullRequestEventItemsProps
           }
         >
           {events.map(event => (
-            <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />
+            <PullRequestItem
+              key={event.id}
+              pullRequest={event.payload.pull_request}
+              date={event.payload.pull_request.created_at}
+            />
           ))}
         </RepoSubList.RepoItem>
       );
@@ -82,7 +86,13 @@ export const PullRequestClosedEventItems = ({ events }: PullRequestEventItemsPro
       );
 
       const items = () =>
-        events.map(event => <PullRequestItem key={event.id} pullRequest={event.payload.pull_request} />);
+        events.map(event => (
+          <PullRequestItem
+            key={event.id}
+            pullRequest={event.payload.pull_request}
+            date={event.payload.pull_request.closed_at}
+          />
+        ));
 
       if (events.some(isHumanPR)) {
         <RepoSubList.RepoItem key={repoName} title={title}>

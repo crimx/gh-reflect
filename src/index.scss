@@ -25,3 +25,13 @@
 [data-color-mode] {
   background-color: var(--bgColor-default);
 }
+
+:where(.btn) {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
