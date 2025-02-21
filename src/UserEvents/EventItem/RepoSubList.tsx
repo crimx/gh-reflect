@@ -6,7 +6,7 @@ export const RepoSubList = {
   List: ({ children }: PropsWithChildren) => <ul className="list-none p-0 m-0">{children}</ul>,
   RepoItem: ({ title, children }: PropsWithChildren<{ title: ReactNode }>) => (
     <li className="mb-2">
-      <div>{title}</div>
+      <div className="p-1 hover:bg-[--bgColor-muted] focus-within:bg-[--bgColor-muted]">{title}</div>
       <ul className="list-none p-0 m-0 pl-1">{children}</ul>
     </li>
   ),
@@ -15,7 +15,7 @@ export const RepoSubList = {
     return (
       <li>
         <button
-          className="btn p-1 w-full text-left flex flex-nowrap items-center overflow-hidden hover:bg-[--bgColor-muted] focus:bg-[--bgColor-muted]"
+          className="btn p-1 w-full text-left flex flex-nowrap items-center overflow-hidden hover:bg-[--bgColor-muted] focus:bg-[--bgColor-muted] focus-within:bg-[--bgColor-muted]"
           onClick={e => {
             if (!(e.target as Element).closest?.("a")) {
               setExpand(expanded => !expanded);
@@ -30,7 +30,7 @@ export const RepoSubList = {
     );
   },
   SubItem: ({ icon, href, date, children }: PropsWithChildren<{ icon: ReactNode; date?: string; href?: string }>) => (
-    <li className="p-[2px] flex flex-nowrap hover:bg-[--bgColor-muted]">
+    <li className="p-[2px] flex flex-nowrap hover:bg-[--bgColor-muted] focus-within:bg-[--bgColor-muted]">
       <span className="mt-[1px] mr-2">{icon}</span>
       {href ? (
         <Link className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]" href={href} target="_blank">
