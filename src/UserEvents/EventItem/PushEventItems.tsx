@@ -56,7 +56,7 @@ const CommitItem = /* @__PURE__ */ memo(function CommitItem({
 }) {
   return (
     <RepoSubList.SubItem
-      icon={<GitCommitIcon className="text-color-[var(--fgColor-done)]" />}
+      icon={<GitCommitIcon className="text-color-[--fgColor-done]" />}
       href={`https://github.com/${repoName}/commit/${commit.sha}`}
     >
       {commit.message.replace(/\n[\s\S]*$/, "")}

@@ -21,19 +21,19 @@ export const DiffStat = /* @__PURE__ */ memo(function DiffStat({ additions, dele
   }
 
   return (
-    <span className="text-xs color-[var(--fgColor-muted)] whitespace-nowrap font-600 cursor-default">
-      <span className="color-[var(--fgColor-success)]"> +{additions} </span>{" "}
-      <span className={`color-[var(--fgColor-danger)] ${styles.darkDangerVisualFix}`}> -{deletions} </span>{" "}
+    <span className="text-xs color-[--fgColor-muted] whitespace-nowrap font-600 cursor-default">
+      <span className="color-[--fgColor-success]"> +{additions} </span>{" "}
+      <span className={`color-[--fgColor-danger] ${styles.darkDangerVisualFix}`}> -{deletions} </span>{" "}
       {Array.from({ length: GRAPH_WIDTH }, (_, i) => (
         <span
           key={i}
           className={clsx(
             "w-2 h-2 ml-[1px] inline-block",
             i < added
-              ? "bg-[var(--bgColor-success-emphasis)]"
+              ? "bg-[--bgColor-success-emphasis]"
               : i < added + removed
-                ? `bg-[var(--bgColor-danger-emphasis)] ${styles.darkDangerVisualFix}`
-                : "bg-[var(--bgColor-neutral-muted)]",
+                ? `bg-[--bgColor-danger-emphasis] ${styles.darkDangerVisualFix}`
+                : "bg-[--bgColor-neutral-muted]",
           )}
         />
       ))}{" "}

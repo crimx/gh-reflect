@@ -52,13 +52,13 @@ const IssueItem = /* @__PURE__ */ memo(function IssueItem({ event }: { event: Is
     <RepoSubList.SubItem
       icon={
         issue.state === "closed" ? (
-          <IssueClosedIcon className="mt-[2px] text-color-[var(--fgColor-done)]" />
+          <IssueClosedIcon className="mt-[2px] text-color-[--fgColor-done]" />
         ) : issue.draft ? (
           <IssueDraftIcon className="mt-[2px]" />
         ) : issue.state_reason === "reopened" ? (
-          <IssueReopenedIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
+          <IssueReopenedIcon className="mt-[2px] text-color-[--fgColor-open]" />
         ) : (
-          <IssueOpenedIcon className="mt-[2px] text-color-[var(--fgColor-open)]" />
+          <IssueOpenedIcon className="mt-[2px] text-color-[--fgColor-open]" />
         )
       }
       href={issue.html_url}

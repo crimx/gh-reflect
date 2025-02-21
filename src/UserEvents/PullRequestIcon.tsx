@@ -18,12 +18,12 @@ export const PullRequestIcon = /* @__PURE__ */ memo<PullRequestIconProps>(functi
   className = "",
 }) {
   return pullRequest.merged ? (
-    <GitMergeIcon className={`mt-[2px] text-color-[var(--fgColor-done)] ${className}`} />
+    <GitMergeIcon className={`mt-[2px] text-color-[--fgColor-done] ${className}`} />
   ) : pullRequest.state === "closed" ? (
-    <GitPullRequestClosedIcon className={`mt-[2px] text-color-[var(--fgColor-closed)] ${className}`} />
+    <GitPullRequestClosedIcon className={`mt-[2px] text-color-[--fgColor-closed] ${className}`} />
   ) : pullRequest.draft ? (
     <GitPullRequestDraftIcon className={`mt-[2px] ${className}`} />
   ) : (
-    <GitPullRequestIcon className={`mt-[2px] text-color-[var(--fgColor-open)] ${className}`} />
+    <GitPullRequestIcon className={`mt-[2px] text-color-[--fgColor-open] ${className}`} />
   );
 });

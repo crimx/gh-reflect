@@ -52,7 +52,7 @@ export const PullRequestItem = /* @__PURE__ */ memo<PullRequestItemProps>(functi
     <RepoSubList.SubItem icon={<PullRequestIcon pullRequest={pullRequest} />} date={date}>
       <div className="relative">
         <Link
-          className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]"
+          className="text-[--fgColor-default] hover:color-[--fgColor-accent]"
           href={pullRequest.html_url}
           target="_blank"
           onMouseOver={open}

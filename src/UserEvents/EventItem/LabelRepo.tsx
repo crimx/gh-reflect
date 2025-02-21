@@ -9,7 +9,7 @@ export interface LabelRepoProps {
 
 export const LabelRepo = ({ repo }: LabelRepoProps) => {
   return (
-    <Link className="underline text-inherit hover:color-[var(--fgColor-accent)]" href={repo.url} target="_blank">
+    <Link className="underline text-inherit hover:color-[--fgColor-accent]" href={repo.url} target="_blank">
       {repo.name}
     </Link>
   );

@@ -13,10 +13,10 @@ export function App() {
     <ThemeProvider colorMode={colorMode}>
       <BaseStyles>
         <SplitPageLayout>
-          <SplitPageLayout.Header className="position-sticky top-0 bg-[var(--bgColor-default)] z-1" padding="condensed">
+          <SplitPageLayout.Header className="position-sticky top-0 bg-[--bgColor-default] z-1" padding="condensed">
             <Header />
           </SplitPageLayout.Header>
-          <SplitPageLayout.Content className="z-0 [&>div]:p-0 min-h-[var(--sticky-pane-height)]">
+          <SplitPageLayout.Content className="z-0 [&>div]:p-0 min-h-[--sticky-pane-height]">
             <Content status$={status$} />
           </SplitPageLayout.Content>
           <SplitPageLayout.Pane

@@ -8,7 +8,7 @@ export const Header = /* @__PURE__ */ memo(function Header() {
   return (
     <div className="flex flex-items-center">
       <Link
-        className="text-inherit hover:color-[var(--fgColor-accent)] flex flex-items-center gap-4 text-base font-bold"
+        className="text-inherit hover:color-[--fgColor-accent] flex flex-items-center gap-4 text-base font-bold"
         href="https://github.com/crimx/gh-reflect"
         target="_blank"
       >

@@ -33,7 +33,7 @@ export const RepoSubList = {
     <li className="p-[2px] flex flex-nowrap hover:bg-[--bgColor-muted] focus-within:bg-[--bgColor-muted]">
       <span className="mt-[1px] mr-2">{icon}</span>
       {href ? (
-        <Link className="text-[var(--fgColor-default)] hover:color-[var(--fgColor-accent)]" href={href} target="_blank">
+        <Link className="text-[--fgColor-default] hover:color-[--fgColor-accent]" href={href} target="_blank">
           {children}
         </Link>
       ) : (
