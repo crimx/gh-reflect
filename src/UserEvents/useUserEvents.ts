@@ -36,8 +36,10 @@ export const useEvents = (): [(options: Options | undefined) => void, Observable
             if (events?.length) {
               eventsByType = { ...eventsByType };
               for (const event of events) {
-                const eventType = event.type || "unknown";
-                eventsByType[eventType] = eventsByType[eventType] ? [...eventsByType[eventType], event] : [event];
+                if (event.created_at && new Date(event.created_at).getTime() >= options.since) {
+                  const eventType = event.type || "unknown";
+                  eventsByType[eventType] = eventsByType[eventType] ? [...eventsByType[eventType], event] : [event];
+                }
               }
             }
             return { ...restStatus, eventsByType, eventsCount, limit, remaining };
