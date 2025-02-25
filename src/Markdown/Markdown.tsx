@@ -29,8 +29,10 @@ export interface MarkdownProps {
 
 export const Markdown = ({ text, className = "" }: MarkdownProps) => {
   return (
-    <ReactMarkdown className={`gfm-body ${className}`} rehypePlugins={rehypePlugins} remarkPlugins={remarkPlugins}>
-      {text}
-    </ReactMarkdown>
+    <article className={`gfm-body ${className}`}>
+      <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={remarkPlugins}>
+        {text}
+      </ReactMarkdown>
+    </article>
   );
 };
