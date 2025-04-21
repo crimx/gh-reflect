@@ -20,17 +20,17 @@
     "@storybook/react": "^8.6.12",
     "@storybook/react-vite": "^8.6.12",
     "@types/node": "^22.14.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "@wopjs/eslint-config": "^0.1.19",
-    "eslint": "^9.24.0",
-    "msw": "^2.7.4",
+    "@vitejs/plugin-react": "^4.4.1",
+    "@wopjs/eslint-config": "^0.1.20",
+    "eslint": "^9.25.1",
+    "msw": "^2.7.5",
     "msw-storybook-addon": "^2.0.4",
     "prettier": "^3.5.3",
     "sass": "^1.86.3",
     "storybook": "^8.5.2",
     "typescript": "^5.8.3",
     "unocss": "^66.0.0",
-    "vite": "^6.2.6"
+    "vite": "^6.3.2"
   },
   "dependencies": {
     "@primer/octicons-react": "^19.15.1",
