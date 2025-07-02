@@ -24,5 +24,15 @@ updates:
         versions: ["19.x"]
       - dependency-name: "react-dom"
         versions: ["19.x"]
+      - dependency-name: "@storybook/addon-essentials"
+        versions: ["9.x"]
+      - dependency-name: "@storybook/react"
+        versions: ["9.x"]
+      - dependency-name: "@storybook/react-vite"
+        versions: ["9.x"]
+      - dependency-name: "storybook"
+        versions: ["9.x"]
       - dependency-name: "styled-components"
         versions: ["6.x"]
+      - dependency-name: "vite"
+        versions: ["7.x"]
